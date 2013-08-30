@@ -7,7 +7,7 @@
     "libetpan",
     "bindings"
   ],
-  "version": "0.1.3",
+  "version": "0.1.0",
   "maintainers": [
     {
       "name": "Hoa V. DINH",
@@ -30,8 +30,7 @@
     "starttls": "~0.2.1"
   },
   "scripts": {
-    "preinstall": "find . && printenv && git clone https://github.com/dinhviethoa/libetpan deps/libetpan",
-    "install": "find . && node-gyp configure build"
+    "install": "git clone https://github.com/dinhviethoa/libetpan deps/libetpan && node-gyp configure build"
   },
   "main": "lib/libetpan.js"
 }
