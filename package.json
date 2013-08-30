@@ -1,0 +1,36 @@
+{
+  "name": "libetpan",
+  "description": "Node bindings to libetpan",
+  "author": "Hoa V. DINH <dinh.viet.hoa@gmail.com>",
+  "keywords": [
+    "imap",
+    "libetpan",
+    "bindings"
+  ],
+  "version": "0.1.0",
+  "maintainers": [
+    {
+      "name": "Hoa V. DINH",
+      "email": "dinh.viet.hoa@gmail.com"
+    }
+  ],
+  "homepage": "http://www.etpan.org/",
+  "bugs": {
+    "url": "https://github.com/dinhviethoa/libetpan/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dinhviethoa/libetpan.git"
+  },
+  "engines": {
+    "node": "~0.8.0"
+  },
+  "dependencies": {
+    "bindings": "~1.1.0",
+    "starttls": "~0.2.1"
+  },
+  "scripts": {
+    "install": "node-gyp configure build"
+  },
+  "main": "lib/libetpan.js"
+}
