@@ -1,0 +1,1 @@
+../../deps/libetpan/src/driver/interface/mailmessage.h

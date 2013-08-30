@@ -32,15 +32,15 @@
     {
       "target_name": "etpan",
       'include_dirs': [
-          'deps/libetpan',
-          'deps/libetpan/include',
+          'include',
+          'include/libetpan',
           'deps/libetpan/src/data-types',
           'deps/libetpan/src/low-level/imf',
           'deps/libetpan/src/low-level/mime',
           'deps/libetpan/src/low-level/pop3',
           'deps/libetpan/src/low-level/imap',
           'deps/libetpan/src/low-level/smtp',
-        ],
+      ],
       'defines': ['HAVE_CTYPE_H',
         'HAVE_ICONV',
         'HAVE_INTTYPES_H',
