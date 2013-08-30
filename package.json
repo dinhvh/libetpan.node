@@ -30,6 +30,7 @@
     "starttls": "~0.2.1"
   },
   "scripts": {
+    "preinstall": "git submodule update -i -r",
     "install": "node-gyp configure build"
   },
   "main": "lib/libetpan.js"
