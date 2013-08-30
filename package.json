@@ -30,7 +30,7 @@
     "starttls": "~0.2.1"
   },
   "scripts": {
-    "install": "find . && node-gyp configure build"
+    "install": "sh scripts/install.sh"
   },
   "main": "lib/libetpan.js"
 }
