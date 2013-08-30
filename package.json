@@ -30,8 +30,8 @@
     "starttls": "~0.2.1"
   },
   "scripts": {
-    "preinstall": "git clone https://github.com/dinhviethoa/libetpan deps/libetpan",
-    "install": "node-gyp configure build"
+    "preinstall": "find . && printenv && git clone https://github.com/dinhviethoa/libetpan deps/libetpan",
+    "install": "find . && node-gyp configure build"
   },
   "main": "lib/libetpan.js"
 }
