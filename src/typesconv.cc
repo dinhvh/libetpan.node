@@ -35,6 +35,8 @@
 #include <v8.h>
 #include <node_buffer.h>
 #include <libetpan/libetpan.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "response.h"
 
