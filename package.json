@@ -30,7 +30,8 @@
     "starttls": "~0.2.1"
   },
   "scripts": {
-    "install": "sh scripts/install.sh"
+    "install": "sh scripts/install.sh",
+    "test": "tap ./test/*.js"
   },
   "main": "lib/libetpan.js"
 }
