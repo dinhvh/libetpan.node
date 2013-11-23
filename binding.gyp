@@ -40,6 +40,8 @@
           'deps/libetpan/src/low-level/pop3',
           'deps/libetpan/src/low-level/imap',
           'deps/libetpan/src/low-level/smtp',
+          'include/libiconv',
+          'deps/libiconv/srclib',
       ],
       'defines': ['HAVE_CTYPE_H',
         'HAVE_ICONV',
@@ -62,16 +64,38 @@
         'UNSTRICT_SYNTAX',
         'USE_SASL',
         'USE_SSL',
+        'ICONV_CONST=const',
+        'USE_AIX=1',
+        'USE_DOS=1',
+        'USE_EXTRA=1',
+        'USE_OSF1=1',
+        'LIBDIR="."'
       ],
       'sources': [ "src/libetpanjs.cc",
         "src/response.cc", "src/typesconv.cc",
+        'deps/libiconv/libcharset/lib/localcharset.c',
+        'deps/libiconv/lib/iconv.c',
+        '<!@(find src -name *.c)',
         '<!@(find deps/libetpan/src/data-types -name *.c)',
         '<!@(find deps/libetpan/src/low-level/imf -name *.c)',
         '<!@(find deps/libetpan/src/low-level/mime -name *.c)',
         '<!@(find deps/libetpan/src/low-level/pop3 -name *.c)',
         '<!@(find deps/libetpan/src/low-level/imap -name *.c)',
         '<!@(find deps/libetpan/src/low-level/smtp -name *.c)',
-      ]
+      ],
+      'conditions': [
+        ['OS == "win"', {
+          'defines': ['WIN32_NATIVE=1'],
+        }, {
+          'defines': ['HAVE_WORKING_O_NOFOLLOW=1'],
+          'cflags': [
+            # silence warnings from iconv.c
+            '-Wno-unused-function',
+            '-Wno-unused-parameter',
+            '-Wno-unused-variable',
+          ],
+        }],
+      ],
     }
   ]
 }
