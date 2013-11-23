@@ -39,6 +39,7 @@
 #include <stdlib.h>
 
 #include "response.h"
+#include "parser.h"
 
 using namespace v8;
 using namespace etpanjs;
@@ -219,7 +220,7 @@ static void AddAddressList(Handle<Object> obj, const char * name, clist * addres
         Local<Object> item = Object::New();
         
         if (address->ad_personal_name != NULL) {
-            item->Set(String::NewSymbol("name"), String::New(address->ad_personal_name));
+            item->Set(String::NewSymbol("name"), String::New(parse(address->ad_personal_name)));
         }
         
         char * mailbox = NULL;
@@ -257,7 +258,7 @@ static Handle<Value> envelopeToV8(struct mailimap_envelope * env)
         obj->Set(String::NewSymbol("date"), String::New(env->env_date));
     }
     if (env->env_subject != NULL) {
-        obj->Set(String::NewSymbol("subject"), String::New(env->env_subject));
+        obj->Set(String::NewSymbol("subject"), String::New(parse(env->env_subject)));
     }
     if (env->env_from != NULL) {
         AddAddressList(obj, "from", env->env_from->frm_list);

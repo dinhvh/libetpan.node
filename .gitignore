@@ -1,0 +1,16 @@
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
+
+
+node_modules
+node_modules_0.6
+node_modules_0.8
+*.rdb
+*.log
+*.swp
+*.sock
+tmp/
+log/
+components
