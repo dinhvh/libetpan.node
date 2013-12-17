@@ -63,6 +63,12 @@
         'USE_SASL',
         'USE_SSL',
       ],
+      'link_settings': {
+        'libraries': [
+          '-lz',
+          '-lsasl2',
+        ]
+      },
       'sources': [ "src/libetpanjs.cc",
         "src/response.cc", "src/typesconv.cc",
         '<!@(find deps/libetpan/src/data-types -name *.c)',
