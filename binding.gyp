@@ -40,8 +40,6 @@
           'deps/libetpan/src/low-level/pop3',
           'deps/libetpan/src/low-level/imap',
           'deps/libetpan/src/low-level/smtp',
-          'include/libiconv',
-          'deps/libiconv/srclib',
       ],
       'defines': ['HAVE_CTYPE_H',
         'HAVE_ICONV',
@@ -73,8 +71,6 @@
       ],
       'sources': [ "src/libetpanjs.cc",
         "src/response.cc", "src/typesconv.cc",
-        'deps/libiconv/libcharset/lib/localcharset.c',
-        'deps/libiconv/lib/iconv.c',
         '<!@(find src -name *.c)',
         '<!@(find deps/libetpan/src/data-types -name *.c)',
         '<!@(find deps/libetpan/src/low-level/imf -name *.c)',
@@ -83,6 +79,13 @@
         '<!@(find deps/libetpan/src/low-level/imap -name *.c)',
         '<!@(find deps/libetpan/src/low-level/smtp -name *.c)',
       ],
+      'link_settings': {
+        'libraries': [
+          '-lz',
+          '-liconv',
+          '-lsasl2',
+        ]
+      },
       'conditions': [
         ['OS == "win"', {
           'defines': ['WIN32_NATIVE=1'],
