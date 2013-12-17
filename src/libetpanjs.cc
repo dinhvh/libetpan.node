@@ -172,8 +172,8 @@ Handle<Value> responseParse(const Arguments& args)
       if (response->rsp_resp_done->rsp_type == MAILIMAP_RESP_DONE_TYPE_FATAL) {
           success = false;
       }
-      if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_type ==
-          MAILIMAP_RESP_COND_STATE_BAD) {
+      if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_type !=
+          MAILIMAP_RESP_COND_STATE_OK) {
           success = false;
       }
       if (!success) {
