@@ -151,6 +151,8 @@ Handle<Value> responseParse(const Arguments& args)
       }
   }
   
+  mmap_string_free(str);
+  
   if (!done) {
       if (r == MAILIMAP_ERROR_NEEDS_MORE_DATA) {
           fprintf(stderr, "response: needs more data\n");
