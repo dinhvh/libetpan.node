@@ -116,9 +116,9 @@ static Handle<Value> getFoldersFromResponseWithOption(const Arguments& args, int
         array->Set(i, obj);
         i ++;
     }
-    
     clist_free(folders);
     
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(array);
 }
 
@@ -589,6 +589,8 @@ Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
         array->Set(idx, obj);
         idx ++;
     }
+    
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(array);
 }
 
@@ -938,6 +940,8 @@ Handle<Value> etpanjs::getCapabilitiesFromResponse(const Arguments& args)
             }
         }
     }
+    
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(array);
 }
 
@@ -982,6 +986,7 @@ Handle<Value> etpanjs::getUIDPlusCopyResponseFromResponse(const Arguments& args)
                 }
             }
         }
+        mailimap_response_free(response);
     }
     
     if (copy_info == NULL) {
@@ -1018,6 +1023,7 @@ Handle<Value> etpanjs::getUIDPlusAppendResponseFromResponse(const Arguments& arg
                 }
             }
         }
+        mailimap_response_free(response);
     }
     
     if (append_info == NULL) {
@@ -1099,6 +1105,8 @@ Handle<Value> etpanjs::getStatusResponseFromResponse(const Arguments& args)
             }
         }
     }
+    
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(result);
 }
 
@@ -1141,6 +1149,7 @@ Handle<Value> etpanjs::getIDResponseFromResponse(const Arguments& args)
         result->Set(String::New(info->idpa_name), String::New(info->idpa_value));
     }
     
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(result);
 }
 
@@ -1186,6 +1195,7 @@ Handle<Value> etpanjs::getSelectResponseFromResponse(const Arguments& args)
         }
     }
     
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(result);
 }
 
@@ -1219,6 +1229,7 @@ Handle<Value> etpanjs::getNoopResponseFromResponse(const Arguments& args)
         }
     }
     
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(result);
 }
 
@@ -1263,5 +1274,7 @@ Handle<Value> etpanjs::getSearchResponseFromResponse(const Arguments& args)
         array->Set(i, Integer::New(* value));
         i ++;
     }
+    
+    if (response != NULL) mailimap_response_free(response);
     return scope.Close(array);
 }
