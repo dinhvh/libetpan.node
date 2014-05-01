@@ -27,7 +27,8 @@
   },
   "dependencies": {
     "bindings": "~1.1.0",
-    "starttls": "~0.2.1"
+    "starttls": "~0.2.1",
+    "debug": "^0.8.1"
   },
   "scripts": {
     "install": "sh scripts/install.sh"
