@@ -32,7 +32,11 @@
     "nan": "^0.8.0"
   },
   "scripts": {
-    "install": "sh scripts/install.sh"
+    "install": "sh scripts/install.sh",
+    "test": "tape tests/*.js"
   },
-  "main": "lib/libetpan.js"
+  "main": "lib/libetpan.js",
+  "devDependencies": {
+    "tape": "^2.12.3"
+  }
 }
