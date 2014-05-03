@@ -40,6 +40,7 @@
           'deps/libetpan/src/low-level/pop3',
           'deps/libetpan/src/low-level/imap',
           'deps/libetpan/src/low-level/smtp',
+          "<!(node -e \"require('nan')\")",
       ],
       'defines': ['HAVE_CTYPE_H',
         'HAVE_ICONV',

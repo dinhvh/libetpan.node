@@ -59,67 +59,55 @@ enum MessageFlag {
 
 static int imap_mailbox_flags_to_flags(struct mailimap_mbx_list_flags * imap_flags);
 static MessageFlag flags_from_lep_att_dynamic(struct mailimap_msg_att_dynamic * att_dynamic);
-static Handle<Value> getFoldersFromResponseWithOption(const Arguments& args, int dataType);
 
-Handle<Value> etpanjs::getFoldersFromResponseList(const Arguments& args)
+#define GET_FOLDERS(flag)       \
+    NanScope();     \
+    Response * obj = ObjectWrap::Unwrap<Response>(args.This());     \
+    struct mailimap_response * response = obj->getResponse();       \
+    clist * folders = clist_new();      \
+    if (response->rsp_cont_req_or_resp_data_list != NULL) {     \
+        for(clistiter * cur = clist_begin(response->rsp_cont_req_or_resp_data_list) ; cur != NULL ; cur = clist_next(cur)) {    \
+            struct mailimap_cont_req_or_resp_data * cont_req_or_resp_data;      \
+            cont_req_or_resp_data = (struct mailimap_cont_req_or_resp_data *) clist_content(cur);   \
+            if (cont_req_or_resp_data->rsp_type == MAILIMAP_RESP_RESP_DATA) {       \
+                struct mailimap_response_data * resp_data;      \
+                resp_data = cont_req_or_resp_data->rsp_data.rsp_resp_data;      \
+                if (resp_data->rsp_type == MAILIMAP_RESP_DATA_TYPE_MAILBOX_DATA) {      \
+                    struct mailimap_mailbox_data * mb_data;     \
+                    mb_data = resp_data->rsp_data.rsp_mailbox_data;     \
+                    if (mb_data->mbd_type == flag) {        \
+                        clist_append(folders, mb_data->mbd_data.mbd_list);      \
+                    }                                                           \
+                }                                                               \
+            }                                                                   \
+        }                                                                       \
+    }                                                                           \
+    unsigned int count = clist_count(folders);      \
+    Handle<Array> array = Array::New(count);        \
+    unsigned int i = 0;     \
+    for(clistiter * iter = clist_begin(folders) ; iter != NULL ; iter = clist_next(iter)) {     \
+        Local<Object> obj = Object::New();      \
+        struct mailimap_mailbox_list * mb_list = (struct mailimap_mailbox_list *) clist_content(iter);      \
+        obj->Set(NanSymbol("path"), String::New(mb_list->mb_name));     \
+        char delimiter[2];      \
+        delimiter[0] = mb_list->mb_delimiter;       \
+        delimiter[1] = 0;       \
+        obj->Set(NanSymbol("delimiter"), String::New(delimiter));       \
+        obj->Set(NanSymbol("flags"), Integer::New(imap_mailbox_flags_to_flags(mb_list->mb_flag)));      \
+        array->Set(i, obj);     \
+        i ++;       \
+    }       \
+    clist_free(folders);                                                        \
+    NanReturnValue(array);                                                \
+
+NAN_METHOD(etpanjs::getFoldersFromResponseList)
 {
-    return getFoldersFromResponseWithOption(args, MAILIMAP_MAILBOX_DATA_LIST);
+    GET_FOLDERS(MAILIMAP_MAILBOX_DATA_LIST)
 }
 
-Handle<Value> etpanjs::getFoldersFromResponseLsub(const Arguments& args)
+NAN_METHOD(etpanjs::getFoldersFromResponseLsub)
 {
-    return getFoldersFromResponseWithOption(args, MAILIMAP_MAILBOX_DATA_LSUB);
-}
-
-static Handle<Value> getFoldersFromResponseWithOption(const Arguments& args, int dataType)
-{
-    HandleScope scope;
-    
-    Response * obj = ObjectWrap::Unwrap<Response>(args.This());
-    struct mailimap_response * response = obj->getResponse();
-    
-    clist * folders = clist_new();
-    if (response->rsp_cont_req_or_resp_data_list != NULL) {
-        for(clistiter * cur = clist_begin(response->rsp_cont_req_or_resp_data_list) ; cur != NULL ; cur = clist_next(cur)) {
-            struct mailimap_cont_req_or_resp_data * cont_req_or_resp_data;
-        
-            cont_req_or_resp_data = (struct mailimap_cont_req_or_resp_data *) clist_content(cur);
-            if (cont_req_or_resp_data->rsp_type == MAILIMAP_RESP_RESP_DATA) {
-                struct mailimap_response_data * resp_data;
-
-                resp_data = cont_req_or_resp_data->rsp_data.rsp_resp_data;
-                if (resp_data->rsp_type == MAILIMAP_RESP_DATA_TYPE_MAILBOX_DATA) {
-                    struct mailimap_mailbox_data * mb_data;
-                
-                    mb_data = resp_data->rsp_data.rsp_mailbox_data;
-                    if (mb_data->mbd_type == dataType) {
-                        clist_append(folders, mb_data->mbd_data.mbd_list);
-                    }
-                }
-            }
-        }
-    }
-    
-    unsigned int count = clist_count(folders);
-    Handle<Array> array = Array::New(count);
-    unsigned int i = 0;
-    for(clistiter * iter = clist_begin(folders) ; iter != NULL ; iter = clist_next(iter)) {
-        Local<Object> obj = Object::New();
-        struct mailimap_mailbox_list * mb_list = (struct mailimap_mailbox_list *) clist_content(iter);
-        
-        obj->Set(String::NewSymbol("path"), String::New(mb_list->mb_name));
-        char delimiter[2];
-        delimiter[0] = mb_list->mb_delimiter;
-        delimiter[1] = 0;
-        obj->Set(String::NewSymbol("delimiter"), String::New(delimiter));
-        obj->Set(String::NewSymbol("flags"), Integer::New(imap_mailbox_flags_to_flags(mb_list->mb_flag)));
-        array->Set(i, obj);
-        i ++;
-    }
-    
-    clist_free(folders);
-    
-    return scope.Close(array);
+    GET_FOLDERS(MAILIMAP_MAILBOX_DATA_LSUB)
 }
 
 static Handle<Value> bodyToV8(struct mailimap_body * body);
@@ -132,12 +120,12 @@ static void addBodyFieldParameter(Handle<Object> obj, const char * fieldName, st
     for(clistiter * iter = clist_begin(parameter->pa_list) ; iter != NULL ; iter = clist_next(iter)) {
         struct mailimap_single_body_fld_param * param = (struct mailimap_single_body_fld_param *) clist_content(iter);
         Local<Object> item = Object::New();
-        item->Set(String::NewSymbol("name"), String::New(param->pa_name));
-        item->Set(String::NewSymbol("value"), String::New(param->pa_value));
+        item->Set(NanSymbol("name"), String::New(param->pa_name));
+        item->Set(NanSymbol("value"), String::New(param->pa_value));
         array->Set(idx, item);
         idx ++;
     }
-    obj->Set(String::NewSymbol(fieldName), array);
+    obj->Set(NanSymbol(fieldName), array);
 }
 
 static void addMIMEFields(Handle<Object> obj, struct mailimap_body_fields * fields)
@@ -146,30 +134,30 @@ static void addMIMEFields(Handle<Object> obj, struct mailimap_body_fields * fiel
         addBodyFieldParameter(obj, "content-type-parameters", fields->bd_parameter);
     }
     if (fields->bd_id != NULL) {
-        obj->Set(String::NewSymbol("id"), String::New(fields->bd_id));
+        obj->Set(NanSymbol("id"), String::New(fields->bd_id));
     }
     if (fields->bd_description != NULL) {
-        obj->Set(String::NewSymbol("description"), String::New(fields->bd_description));
+        obj->Set(NanSymbol("description"), String::New(fields->bd_description));
     }
     if (fields->bd_encoding != NULL) {
         switch (fields->bd_encoding->enc_type) {
             case MAILIMAP_BODY_FLD_ENC_7BIT:
-                obj->Set(String::NewSymbol("encoding"), String::New("7bit"));
+                obj->Set(NanSymbol("encoding"), String::New("7bit"));
                 break;
             case MAILIMAP_BODY_FLD_ENC_8BIT:
-                obj->Set(String::NewSymbol("encoding"), String::New("8bit"));
+                obj->Set(NanSymbol("encoding"), String::New("8bit"));
                 break;
             case MAILIMAP_BODY_FLD_ENC_BINARY:
-                obj->Set(String::NewSymbol("encoding"), String::New("binary"));
+                obj->Set(NanSymbol("encoding"), String::New("binary"));
                 break;
             case MAILIMAP_BODY_FLD_ENC_BASE64:
-                obj->Set(String::NewSymbol("encoding"), String::New("base64"));
+                obj->Set(NanSymbol("encoding"), String::New("base64"));
                 break;
             case MAILIMAP_BODY_FLD_ENC_QUOTED_PRINTABLE:
-                obj->Set(String::NewSymbol("encoding"), String::New("quoted-printable"));
+                obj->Set(NanSymbol("encoding"), String::New("quoted-printable"));
                 break;
             case MAILIMAP_BODY_FLD_ENC_OTHER:
-                obj->Set(String::NewSymbol("encoding"), String::New(fields->bd_encoding->enc_value));
+                obj->Set(NanSymbol("encoding"), String::New(fields->bd_encoding->enc_value));
                 break;
         }
     }
@@ -203,7 +191,7 @@ static void addMedia(Local<Object> obj, struct mailimap_media_basic * media) {
     size_t len = strlen(leftPart) + strlen(rightPart) + 2;
     char * result = (char *) malloc(len);
     snprintf(result, len, "%s/%s", leftPart, rightPart);
-    obj->Set(String::NewSymbol("mimeType"), String::New(result));
+    obj->Set(NanSymbol("mimeType"), String::New(result));
     free(result);
 }
 
@@ -219,7 +207,7 @@ static void AddAddressList(Handle<Object> obj, const char * name, clist * addres
         Local<Object> item = Object::New();
         
         if (address->ad_personal_name != NULL) {
-            item->Set(String::NewSymbol("name"), String::New(address->ad_personal_name));
+            item->Set(NanSymbol("name"), String::New(address->ad_personal_name));
         }
         
         char * mailbox = NULL;
@@ -238,26 +226,26 @@ static void AddAddressList(Handle<Object> obj, const char * name, clist * addres
         }
         
         if (mailbox != NULL) {
-            item->Set(String::NewSymbol("mailbox"), String::New(mailbox));
+            item->Set(NanSymbol("mailbox"), String::New(mailbox));
             free(mailbox);
         }
         array->Set(idx, item);
         idx ++;
     }
     
-    obj->Set(String::NewSymbol(name), array);
+    obj->Set(NanSymbol(name), array);
 }
 
 static Handle<Value> envelopeToV8(struct mailimap_envelope * env)
 {
-    HandleScope scope;
+    NanScope();
     
     Local<Object> obj = Object::New();
     if (env->env_date != NULL) {
-        obj->Set(String::NewSymbol("date"), String::New(env->env_date));
+        obj->Set(NanSymbol("date"), String::New(env->env_date));
     }
     if (env->env_subject != NULL) {
-        obj->Set(String::NewSymbol("subject"), String::New(env->env_subject));
+        obj->Set(NanSymbol("subject"), String::New(env->env_subject));
     }
     if (env->env_from != NULL) {
         AddAddressList(obj, "from", env->env_from->frm_list);
@@ -278,13 +266,13 @@ static Handle<Value> envelopeToV8(struct mailimap_envelope * env)
         AddAddressList(obj, "bcc", env->env_bcc->bcc_list);
     }
     if (env->env_in_reply_to != NULL) {
-        obj->Set(String::NewSymbol("inreplyto"), String::New(env->env_in_reply_to));
+        obj->Set(NanSymbol("inreplyto"), String::New(env->env_in_reply_to));
     }
     if (env->env_message_id != NULL) {
-        obj->Set(String::NewSymbol("msgid"), String::New(env->env_message_id));
+        obj->Set(NanSymbol("msgid"), String::New(env->env_message_id));
     }
     
-    return scope.Close(obj);
+    return obj;
 }
 
 static void AddLanguage(Handle<Object> obj, struct mailimap_body_fld_lang * lang)
@@ -314,16 +302,16 @@ static void AddLanguage(Handle<Object> obj, struct mailimap_body_fld_lang * lang
             break;
         }
     }
-    obj->Set(String::NewSymbol("language"), array);
+    obj->Set(NanSymbol("language"), array);
 }
 
 static void AddExtensions(Handle<Object> obj, struct mailimap_body_ext_1part * ext_1part)
 {
     if (ext_1part->bd_md5 != NULL) {
-        obj->Set(String::NewSymbol("md5"), String::New(ext_1part->bd_md5));
+        obj->Set(NanSymbol("md5"), String::New(ext_1part->bd_md5));
     }
     if (ext_1part->bd_disposition != NULL) {
-        obj->Set(String::NewSymbol("disposition-type"), String::New(ext_1part->bd_disposition->dsp_type));
+        obj->Set(NanSymbol("disposition-type"), String::New(ext_1part->bd_disposition->dsp_type));
         if (ext_1part->bd_disposition->dsp_attributes != NULL) {
             addBodyFieldParameter(obj, "disposition-parameters", ext_1part->bd_disposition->dsp_attributes);
         }
@@ -332,7 +320,7 @@ static void AddExtensions(Handle<Object> obj, struct mailimap_body_ext_1part * e
         AddLanguage(obj, ext_1part->bd_language);
     }
     if (ext_1part->bd_loc != NULL) {
-        obj->Set(String::NewSymbol("location"), String::New(ext_1part->bd_loc));
+        obj->Set(NanSymbol("location"), String::New(ext_1part->bd_loc));
     }
     if (ext_1part->bd_extension_list != NULL) {
         // TODO
@@ -345,7 +333,7 @@ static void AddMultipartExtensions(Handle<Object> obj, struct mailimap_body_ext_
         addBodyFieldParameter(obj, "content-type-parameters", ext_mpart->bd_parameter);
     }
     if (ext_mpart->bd_disposition != NULL) {
-        obj->Set(String::NewSymbol("disposition-type"), String::New(ext_mpart->bd_disposition->dsp_type));
+        obj->Set(NanSymbol("disposition-type"), String::New(ext_mpart->bd_disposition->dsp_type));
         if (ext_mpart->bd_disposition->dsp_attributes != NULL) {
             addBodyFieldParameter(obj, "disposition-parameters", ext_mpart->bd_disposition->dsp_attributes);
         }
@@ -354,7 +342,7 @@ static void AddMultipartExtensions(Handle<Object> obj, struct mailimap_body_ext_
         AddLanguage(obj, ext_mpart->bd_language);
     }
     if (ext_mpart->bd_loc != NULL) {
-        obj->Set(String::NewSymbol("location"), String::New(ext_mpart->bd_loc));
+        obj->Set(NanSymbol("location"), String::New(ext_mpart->bd_loc));
     }
     if (ext_mpart->bd_extension_list != NULL) {
         //TODO
@@ -363,10 +351,10 @@ static void AddMultipartExtensions(Handle<Object> obj, struct mailimap_body_ext_
 
 static Handle<Value> singlePartToV8(struct mailimap_body_type_1part * part)
 {
-    HandleScope scope;
+    NanScope();
     
     Local<Object> obj = Object::New();
-    obj->Set(String::NewSymbol("type"), String::NewSymbol("single"));
+    obj->Set(NanSymbol("type"), NanSymbol("single"));
     switch (part->bd_type) {
         case MAILIMAP_BODY_TYPE_1PART_BASIC: {
             addMedia(obj, part->bd_data.bd_type_basic->bd_media_basic);
@@ -378,43 +366,42 @@ static Handle<Value> singlePartToV8(struct mailimap_body_type_1part * part)
             size_t len = strlen("text/") + strlen(part->bd_data.bd_type_text->bd_media_text) + 1;
             char * mimeType = (char *) malloc(len);
             snprintf(mimeType, len, "text/%s", part->bd_data.bd_type_text->bd_media_text);
-            obj->Set(String::NewSymbol("mimeType"), String::New(mimeType));
+            obj->Set(NanSymbol("mimeType"), String::New(mimeType));
             free(mimeType);
             addMIMEFields(obj, part->bd_data.bd_type_basic->bd_fields);
             break;
         }
     }
     AddExtensions(obj, part->bd_ext_1part);
-    
-    return scope.Close(obj);
+    return obj;
 }
 
 static Handle<Value> messagePartBodyToV8(struct mailimap_body_type_1part * part)
 {
-    HandleScope scope;
+    NanScope();
     Local<Object> obj = Object::New();
-    obj->Set(String::NewSymbol("type"), String::NewSymbol("message"));
+    obj->Set(NanSymbol("type"), NanSymbol("message"));
     addMIMEFields(obj, part->bd_data.bd_type_msg->bd_fields);
-    obj->Set(String::NewSymbol("mimeType"), String::New("message/rfc822"));
-    obj->Set(String::NewSymbol("env"), envelopeToV8(part->bd_data.bd_type_msg->bd_envelope));
-    obj->Set(String::NewSymbol("body"), bodyToV8(part->bd_data.bd_type_msg->bd_body));
+    obj->Set(NanSymbol("mimeType"), String::New("message/rfc822"));
+    obj->Set(NanSymbol("env"), envelopeToV8(part->bd_data.bd_type_msg->bd_envelope));
+    obj->Set(NanSymbol("body"), bodyToV8(part->bd_data.bd_type_msg->bd_body));
     AddExtensions(obj, part->bd_ext_1part);
-    return scope.Close(obj);
+    return obj;
 }
 
 static Handle<Value> multipartToV8(struct mailimap_body_type_mpart * part)
 {
-    HandleScope scope;
+    NanScope();
     
     Local<Object> obj = Object::New();
     
-    obj->Set(String::NewSymbol("type"), String::NewSymbol("multipart"));
+    obj->Set(NanSymbol("type"), NanSymbol("multipart"));
     
     // mime type
     size_t len = strlen("multipart/") + strlen(part->bd_media_subtype) + 1;
     char * mimeType = (char *) malloc(len);
     snprintf(mimeType, len, "multipart/%s", part->bd_media_subtype);
-    obj->Set(String::NewSymbol("mimeType"), String::New(mimeType));
+    obj->Set(NanSymbol("mimeType"), String::New(mimeType));
     free(mimeType);
     
     int count = clist_count(part->bd_list);
@@ -425,11 +412,10 @@ static Handle<Value> multipartToV8(struct mailimap_body_type_mpart * part)
         array->Set(idx, bodyToV8(body));
         idx ++;
     }
-    obj->Set(String::NewSymbol("subparts"), array);
+    obj->Set(NanSymbol("subparts"), array);
     
     AddMultipartExtensions(obj, part->bd_ext_mpart);
-    
-    return scope.Close(obj);
+    return obj;
 }
 
 static Handle<Value> bodyToV8(struct mailimap_body * body)
@@ -450,12 +436,12 @@ static Handle<Value> bodyToV8(struct mailimap_body * body)
         }
     }
     //TODO: assert
-    return Handle<Value>(NULL);
+    return Object::New();
 }
 
-Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getFetchItemsFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -495,54 +481,54 @@ Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
             switch (item->att_type) {
                 case MAILIMAP_MSG_ATT_ITEM_DYNAMIC: {
                     MessageFlag flags = flags_from_lep_att_dynamic(item->att_data.att_dyn);
-                    obj->Set(String::NewSymbol("flags"), Integer::New(flags));
+                    obj->Set(NanSymbol("flags"), Integer::New(flags));
                     break;
                 }
                 case MAILIMAP_MSG_ATT_ITEM_STATIC: {
                     switch (item->att_data.att_static->att_type) {
                         case MAILIMAP_MSG_ATT_ENVELOPE: {
-                            obj->Set(String::NewSymbol("env"), envelopeToV8(item->att_data.att_static->att_data.att_env));
+                            obj->Set(NanSymbol("env"), envelopeToV8(item->att_data.att_static->att_data.att_env));
                             break;
                         }
                         case MAILIMAP_MSG_ATT_INTERNALDATE: {
-                            obj->Set(String::NewSymbol("receivedDate"), Integer::New(item->att_data.att_static->att_data.att_uid));
+                            obj->Set(NanSymbol("receivedDate"), Integer::New(item->att_data.att_static->att_data.att_uid));
                             break;
                         }
                         case MAILIMAP_MSG_ATT_RFC822: {
-                            Buffer * buffer = Buffer::New(item->att_data.att_static->att_data.att_rfc822.att_content, item->att_data.att_static->att_data.att_rfc822.att_length);
-                            obj->Set(String::NewSymbol("rfc822"), buffer->handle_);
+                            Local<Object> buffer = NanNewBufferHandle(item->att_data.att_static->att_data.att_rfc822.att_content, item->att_data.att_static->att_data.att_rfc822.att_length);
+                            obj->Set(NanSymbol("rfc822"), buffer);
                             break;
                         }
                         case MAILIMAP_MSG_ATT_RFC822_HEADER: {
-                            Buffer * buffer = Buffer::New(item->att_data.att_static->att_data.att_rfc822_header.att_content, item->att_data.att_static->att_data.att_rfc822_header.att_length);
-                            obj->Set(String::NewSymbol("header"), buffer->handle_);
+                            Local<Object> buffer = NanNewBufferHandle(item->att_data.att_static->att_data.att_rfc822_header.att_content, item->att_data.att_static->att_data.att_rfc822_header.att_length);
+                            obj->Set(NanSymbol("header"), buffer);
                             break;
                         }
                         case MAILIMAP_MSG_ATT_RFC822_TEXT: {
-                            Buffer * buffer = Buffer::New(item->att_data.att_static->att_data.att_rfc822_text.att_content, item->att_data.att_static->att_data.att_rfc822_text.att_length);
-                            obj->Set(String::NewSymbol("text"), buffer->handle_);
+                            Local<Object> buffer = NanNewBufferHandle(item->att_data.att_static->att_data.att_rfc822_text.att_content, item->att_data.att_static->att_data.att_rfc822_text.att_length);
+                            obj->Set(NanSymbol("text"), buffer);
                             break;
                         }
                         case MAILIMAP_MSG_ATT_RFC822_SIZE: {
-                            obj->Set(String::NewSymbol("size"), Integer::New(item->att_data.att_static->att_data.att_rfc822_size));
+                            obj->Set(NanSymbol("size"), Integer::New(item->att_data.att_static->att_data.att_rfc822_size));
                             break;
                         }
                         case MAILIMAP_MSG_ATT_BODY: {
-                            obj->Set(String::NewSymbol("bodystructure"), bodyToV8(item->att_data.att_static->att_data.att_body));
+                            obj->Set(NanSymbol("bodystructure"), bodyToV8(item->att_data.att_static->att_data.att_body));
                             break;
                         }
                         case MAILIMAP_MSG_ATT_BODYSTRUCTURE: {
-                            obj->Set(String::NewSymbol("bodystructure"), bodyToV8(item->att_data.att_static->att_data.att_bodystructure));
+                            obj->Set(NanSymbol("bodystructure"), bodyToV8(item->att_data.att_static->att_data.att_bodystructure));
                             break;
                         }
                         case MAILIMAP_MSG_ATT_BODY_SECTION: {
-                            Buffer * buffer = Buffer::New(item->att_data.att_static->att_data.att_body_section->sec_body_part, item->att_data.att_static->att_data.att_body_section->sec_length);
-                            obj->Set(String::NewSymbol("bodysection"), buffer->handle_);
+                            Local<Object> buffer = NanNewBufferHandle(item->att_data.att_static->att_data.att_body_section->sec_body_part, item->att_data.att_static->att_data.att_body_section->sec_length);
+                            obj->Set(NanSymbol("bodysection"), buffer);
                             break;
                         }
                         case MAILIMAP_MSG_ATT_UID: {
                             //fprintf(stderr, "uid: %i\n", item->att_data.att_static->att_data.att_uid);
-                            obj->Set(String::NewSymbol("uid"), Integer::New(item->att_data.att_static->att_data.att_uid));
+                            obj->Set(NanSymbol("uid"), Integer::New(item->att_data.att_static->att_data.att_uid));
                             break;
                         }
                     }
@@ -553,7 +539,7 @@ Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
                         struct mailimap_condstore_fetch_mod_resp * fetch_data = (struct mailimap_condstore_fetch_mod_resp *) ext_data->ext_data;
                         char valueString[32];
                         snprintf(valueString, sizeof(valueString), "%llu", (unsigned long long) fetch_data->cs_modseq_value);
-                        obj->Set(String::NewSymbol("modseq"), String::New(valueString));
+                        obj->Set(NanSymbol("modseq"), String::New(valueString));
                     }
                     else if (ext_data->ext_extension == &mailimap_extension_xgmlabels) {
                         struct mailimap_msg_att_xgmlabels * att = (struct mailimap_msg_att_xgmlabels *) ext_data->ext_data;
@@ -566,20 +552,20 @@ Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
                                 labels->Set(labelIdx, String::New(label));
                                 labelIdx ++;
                             }
-                            obj->Set(String::NewSymbol("gmailLabels"), labels);
+                            obj->Set(NanSymbol("gmailLabels"), labels);
                         }
                     }
                     else if (ext_data->ext_extension == &mailimap_extension_xgmmsgid) {
                         uint64_t * p_msgid = (uint64_t *) ext_data->ext_data;
                         char valueString[32];
                         snprintf(valueString, sizeof(valueString), "%llu", (unsigned long long) * p_msgid);
-                        obj->Set(String::NewSymbol("gmailMsgID"), String::New(valueString));
+                        obj->Set(NanSymbol("gmailMsgID"), String::New(valueString));
                     }
                     else if (ext_data->ext_extension == &mailimap_extension_xgmthrid) {
                         uint64_t * p_thrid = (uint64_t *) ext_data->ext_data;
                         char valueString[32];
                         snprintf(valueString, sizeof(valueString), "%llu", (unsigned long long) * p_thrid);
-                        obj->Set(String::NewSymbol("gmailThreadID"), String::New(valueString));
+                        obj->Set(NanSymbol("gmailThreadID"), String::New(valueString));
                     }
                     break;
                 }
@@ -589,7 +575,7 @@ Handle<Value> etpanjs::getFetchItemsFromResponse(const Arguments& args)
         array->Set(idx, obj);
         idx ++;
     }
-    return scope.Close(array);
+    NanReturnValue(array);
 }
 
 enum IMAPFolderFlag {
@@ -815,9 +801,9 @@ struct {
     {"XOAUTH2", IMAPCapabilityXOAuth2},
 };
 
-Handle<Value> etpanjs::getCapabilitiesFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getCapabilitiesFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_capability_data * imap_capability = NULL;
@@ -886,7 +872,7 @@ Handle<Value> etpanjs::getCapabilitiesFromResponse(const Arguments& args)
     }
     
     if (imap_capability == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     int count = 0;
@@ -938,12 +924,12 @@ Handle<Value> etpanjs::getCapabilitiesFromResponse(const Arguments& args)
             }
         }
     }
-    return scope.Close(array);
+    NanReturnValue(array);
 }
 
 Handle<Value> imap_set_to_range(struct mailimap_set * uids)
 {
-    HandleScope scope;
+    NanScope();
     int count = clist_count(uids->set_list);
     Handle<Array> array = Array::New(count);
     int idx = 0;
@@ -956,12 +942,12 @@ Handle<Value> imap_set_to_range(struct mailimap_set * uids)
         array->Set(idx, resultItem);
         idx ++;
     }
-    return scope.Close(array);
+    return array;
 }
 
-Handle<Value> etpanjs::getUIDPlusCopyResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getUIDPlusCopyResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     struct mailimap_uidplus_resp_code_copy * copy_info = NULL;
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
@@ -985,19 +971,19 @@ Handle<Value> etpanjs::getUIDPlusCopyResponseFromResponse(const Arguments& args)
     }
     
     if (copy_info == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("uidvalidity"), Integer::New(copy_info->uid_uidvalidity));
-    result->Set(String::NewSymbol("sourceUids"), imap_set_to_range(copy_info->uid_source_set));
-    result->Set(String::NewSymbol("destUids"), imap_set_to_range(copy_info->uid_dest_set));
-    return scope.Close(result);
+    result->Set(NanSymbol("uidvalidity"), Integer::New(copy_info->uid_uidvalidity));
+    result->Set(NanSymbol("sourceUids"), imap_set_to_range(copy_info->uid_source_set));
+    result->Set(NanSymbol("destUids"), imap_set_to_range(copy_info->uid_dest_set));
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getUIDPlusAppendResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getUIDPlusAppendResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     struct mailimap_uidplus_resp_code_apnd * append_info = NULL;
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
@@ -1021,18 +1007,18 @@ Handle<Value> etpanjs::getUIDPlusAppendResponseFromResponse(const Arguments& arg
     }
     
     if (append_info == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     Local<Object> result = Object::New();
-    result->Set(String::NewSymbol("uidvalidity"), Integer::New(append_info->uid_uidvalidity));
-    result->Set(String::NewSymbol("appendUids"), imap_set_to_range(append_info->uid_set));
-    return scope.Close(result);
+    result->Set(NanSymbol("uidvalidity"), Integer::New(append_info->uid_uidvalidity));
+    result->Set(NanSymbol("appendUids"), imap_set_to_range(append_info->uid_set));
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getStatusResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getStatusResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -1060,7 +1046,7 @@ Handle<Value> etpanjs::getStatusResponseFromResponse(const Arguments& args)
     }
     
     if (statusData == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     Local<Object> result = Object::New();
@@ -1068,23 +1054,23 @@ Handle<Value> etpanjs::getStatusResponseFromResponse(const Arguments& args)
         struct mailimap_status_info * info = (struct mailimap_status_info *) clist_content(iter);
         switch (info->st_att) {
             case MAILIMAP_STATUS_ATT_MESSAGES: {
-                result->Set(String::NewSymbol("messages"), Integer::New(info->st_value));
+                result->Set(NanSymbol("messages"), Integer::New(info->st_value));
                 break;
             }
             case MAILIMAP_STATUS_ATT_RECENT: {
-                result->Set(String::NewSymbol("recent"), Integer::New(info->st_value));
+                result->Set(NanSymbol("recent"), Integer::New(info->st_value));
                 break;
             }
             case MAILIMAP_STATUS_ATT_UIDNEXT: {
-                result->Set(String::NewSymbol("uidnext"), Integer::New(info->st_value));
+                result->Set(NanSymbol("uidnext"), Integer::New(info->st_value));
                 break;
             }
             case MAILIMAP_STATUS_ATT_UIDVALIDITY: {
-                result->Set(String::NewSymbol("uidvalidity"), Integer::New(info->st_value));
+                result->Set(NanSymbol("uidvalidity"), Integer::New(info->st_value));
                 break;
             }
             case MAILIMAP_STATUS_ATT_UNSEEN: {
-                result->Set(String::NewSymbol("unseen"), Integer::New(info->st_value));
+                result->Set(NanSymbol("unseen"), Integer::New(info->st_value));
                 break;
             }
             case MAILIMAP_STATUS_ATT_EXTENSION: {
@@ -1093,18 +1079,18 @@ Handle<Value> etpanjs::getStatusResponseFromResponse(const Arguments& args)
                     struct mailimap_condstore_status_info * status_info = (struct mailimap_condstore_status_info *) data->ext_data;
                     char value_string[32];
                     snprintf(value_string, sizeof(value_string), "%llu", (unsigned long long) status_info->cs_highestmodseq_value);
-                    result->Set(String::NewSymbol("highestmodseq"), String::New(value_string));
+                    result->Set(NanSymbol("highestmodseq"), String::New(value_string));
                 }
                 break;
             }
         }
     }
-    return scope.Close(result);
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getIDResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getIDResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -1132,7 +1118,7 @@ Handle<Value> etpanjs::getIDResponseFromResponse(const Arguments& args)
     }
     
     if (server_info == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     Local<Object> result = Object::New();
@@ -1141,12 +1127,12 @@ Handle<Value> etpanjs::getIDResponseFromResponse(const Arguments& args)
         result->Set(String::New(info->idpa_name), String::New(info->idpa_value));
     }
     
-    return scope.Close(result);
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getSelectResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getSelectResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -1167,7 +1153,7 @@ Handle<Value> etpanjs::getSelectResponseFromResponse(const Arguments& args)
                 
                     mb_data = resp_data->rsp_data.rsp_mailbox_data;
                     if (mb_data->mbd_type == MAILIMAP_MAILBOX_DATA_EXISTS) {
-                        result->Set(String::NewSymbol("exists"), Integer::New(mb_data->mbd_data.mbd_exists));
+                        result->Set(NanSymbol("exists"), Integer::New(mb_data->mbd_data.mbd_exists));
                     }
                 }
             }
@@ -1177,21 +1163,21 @@ Handle<Value> etpanjs::getSelectResponseFromResponse(const Arguments& args)
         if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text != NULL) {
             if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code != NULL) {
                 if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_type == MAILIMAP_RESP_TEXT_CODE_UIDNEXT) {
-                    result->Set(String::NewSymbol("uidnext"), Integer::New(response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_data.rc_uidnext));
+                    result->Set(NanSymbol("uidnext"), Integer::New(response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_data.rc_uidnext));
                 }
                 else if (response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_type == MAILIMAP_RESP_TEXT_CODE_UIDVALIDITY) {
-                    result->Set(String::NewSymbol("uidvalidity"), Integer::New(response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_data.rc_uidvalidity));
+                    result->Set(NanSymbol("uidvalidity"), Integer::New(response->rsp_resp_done->rsp_data.rsp_tagged->rsp_cond_state->rsp_text->rsp_code->rc_data.rc_uidvalidity));
                 }
             }
         }
     }
     
-    return scope.Close(result);
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getNoopResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getNoopResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -1212,19 +1198,19 @@ Handle<Value> etpanjs::getNoopResponseFromResponse(const Arguments& args)
                 
                     mb_data = resp_data->rsp_data.rsp_mailbox_data;
                     if (mb_data->mbd_type == MAILIMAP_MAILBOX_DATA_EXISTS) {
-                        result->Set(String::NewSymbol("exists"), Integer::New(mb_data->mbd_data.mbd_exists));
+                        result->Set(NanSymbol("exists"), Integer::New(mb_data->mbd_data.mbd_exists));
                     }
                 }
             }
         }
     }
     
-    return scope.Close(result);
+    NanReturnValue(result);
 }
 
-Handle<Value> etpanjs::getSearchResponseFromResponse(const Arguments& args)
+NAN_METHOD(etpanjs::getSearchResponseFromResponse)
 {
-    HandleScope scope;
+    NanScope();
     
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
@@ -1252,7 +1238,7 @@ Handle<Value> etpanjs::getSearchResponseFromResponse(const Arguments& args)
     }
     
     if (search_result == NULL) {
-        return Handle<Value>();
+        NanReturnNull();
     }
     
     unsigned int count = clist_count(search_result);
@@ -1263,5 +1249,5 @@ Handle<Value> etpanjs::getSearchResponseFromResponse(const Arguments& args)
         array->Set(i, Integer::New(* value));
         i ++;
     }
-    return scope.Close(array);
+    NanReturnValue(array);
 }

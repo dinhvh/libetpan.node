@@ -34,6 +34,7 @@
 
 #include <node.h>
 #include <libetpan/libetpan.h>
+#include "nan.h"
 
 using namespace v8;
 
@@ -47,7 +48,8 @@ namespace etpanjs {
         static Persistent<FunctionTemplate> responseTemplate;
 
         static void Init(Handle<Object> exports);
-        static Handle<Object> New(const Arguments& args);
+
+        static NAN_METHOD(New);
         static Handle<Object> New(int result, int type, bool hasIdleData);
         
         virtual void setResponse(struct mailimap_response * response);

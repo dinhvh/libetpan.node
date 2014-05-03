@@ -1,0 +1,427 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/local/bin/node', '/usr/local/bin/npm', 'install' ]
+2 info using npm@1.4.3
+3 info using node@v0.10.26
+4 verbose readDependencies using package.json deps
+5 verbose install where, deps [ '/Users/liuyazhong/workspace/libetpan.node',
+5 verbose install   [ 'bindings', 'starttls', 'debug', 'nan' ] ]
+6 info preinstall libetpan@0.1.0
+7 verbose readDependencies using package.json deps
+8 verbose cache add [ 'bindings@~1.1.0', null ]
+9 verbose cache add name=undefined spec="bindings@~1.1.0" args=["bindings@~1.1.0",null]
+10 verbose parsed url { protocol: null,
+10 verbose parsed url   slashes: null,
+10 verbose parsed url   auth: null,
+10 verbose parsed url   host: null,
+10 verbose parsed url   port: null,
+10 verbose parsed url   hostname: null,
+10 verbose parsed url   hash: null,
+10 verbose parsed url   search: null,
+10 verbose parsed url   query: null,
+10 verbose parsed url   pathname: 'bindings@~1.1.0',
+10 verbose parsed url   path: 'bindings@~1.1.0',
+10 verbose parsed url   href: 'bindings@~1.1.0' }
+11 verbose cache add name="bindings" spec="~1.1.0" args=["bindings","~1.1.0"]
+12 verbose parsed url { protocol: null,
+12 verbose parsed url   slashes: null,
+12 verbose parsed url   auth: null,
+12 verbose parsed url   host: null,
+12 verbose parsed url   port: null,
+12 verbose parsed url   hostname: null,
+12 verbose parsed url   hash: null,
+12 verbose parsed url   search: null,
+12 verbose parsed url   query: null,
+12 verbose parsed url   pathname: '~1.1.0',
+12 verbose parsed url   path: '~1.1.0',
+12 verbose parsed url   href: '~1.1.0' }
+13 verbose addNamed [ 'bindings', '~1.1.0' ]
+14 verbose addNamed [ null, '>=1.1.0-0 <1.2.0-0' ]
+15 verbose cache add [ 'starttls@~0.2.1', null ]
+16 verbose cache add name=undefined spec="starttls@~0.2.1" args=["starttls@~0.2.1",null]
+17 verbose parsed url { protocol: null,
+17 verbose parsed url   slashes: null,
+17 verbose parsed url   auth: null,
+17 verbose parsed url   host: null,
+17 verbose parsed url   port: null,
+17 verbose parsed url   hostname: null,
+17 verbose parsed url   hash: null,
+17 verbose parsed url   search: null,
+17 verbose parsed url   query: null,
+17 verbose parsed url   pathname: 'starttls@~0.2.1',
+17 verbose parsed url   path: 'starttls@~0.2.1',
+17 verbose parsed url   href: 'starttls@~0.2.1' }
+18 verbose cache add name="starttls" spec="~0.2.1" args=["starttls","~0.2.1"]
+19 verbose parsed url { protocol: null,
+19 verbose parsed url   slashes: null,
+19 verbose parsed url   auth: null,
+19 verbose parsed url   host: null,
+19 verbose parsed url   port: null,
+19 verbose parsed url   hostname: null,
+19 verbose parsed url   hash: null,
+19 verbose parsed url   search: null,
+19 verbose parsed url   query: null,
+19 verbose parsed url   pathname: '~0.2.1',
+19 verbose parsed url   path: '~0.2.1',
+19 verbose parsed url   href: '~0.2.1' }
+20 verbose addNamed [ 'starttls', '~0.2.1' ]
+21 verbose addNamed [ null, '>=0.2.1-0 <0.3.0-0' ]
+22 silly lockFile 3e6cf8d3-bindings-1-1-0 bindings@~1.1.0
+23 verbose lock bindings@~1.1.0 /Users/liuyazhong/.npm/3e6cf8d3-bindings-1-1-0.lock
+24 verbose cache add [ 'debug@^0.8.1', null ]
+25 verbose cache add name=undefined spec="debug@^0.8.1" args=["debug@^0.8.1",null]
+26 verbose parsed url { protocol: null,
+26 verbose parsed url   slashes: null,
+26 verbose parsed url   auth: null,
+26 verbose parsed url   host: null,
+26 verbose parsed url   port: null,
+26 verbose parsed url   hostname: null,
+26 verbose parsed url   hash: null,
+26 verbose parsed url   search: null,
+26 verbose parsed url   query: null,
+26 verbose parsed url   pathname: 'debug@^0.8.1',
+26 verbose parsed url   path: 'debug@^0.8.1',
+26 verbose parsed url   href: 'debug@^0.8.1' }
+27 verbose cache add name="debug" spec="^0.8.1" args=["debug","^0.8.1"]
+28 verbose parsed url { protocol: null,
+28 verbose parsed url   slashes: null,
+28 verbose parsed url   auth: null,
+28 verbose parsed url   host: null,
+28 verbose parsed url   port: null,
+28 verbose parsed url   hostname: null,
+28 verbose parsed url   hash: null,
+28 verbose parsed url   search: null,
+28 verbose parsed url   query: null,
+28 verbose parsed url   pathname: '^0.8.1',
+28 verbose parsed url   path: '^0.8.1',
+28 verbose parsed url   href: '^0.8.1' }
+29 verbose addNamed [ 'debug', '^0.8.1' ]
+30 verbose addNamed [ null, '>=0.8.1-0 <0.9.0-0' ]
+31 silly lockFile aca27dec-debug-0-8-1 debug@^0.8.1
+32 verbose lock debug@^0.8.1 /Users/liuyazhong/.npm/aca27dec-debug-0-8-1.lock
+33 verbose already installed skipping nan@^0.8.0 /Users/liuyazhong/workspace/libetpan.node
+34 silly lockFile 8ca0e869-starttls-0-2-1 starttls@~0.2.1
+35 verbose lock starttls@~0.2.1 /Users/liuyazhong/.npm/8ca0e869-starttls-0-2-1.lock
+36 silly addNameRange { name: 'bindings', range: '>=1.1.0-0 <1.2.0-0', hasData: false }
+37 silly addNameRange { name: 'debug', range: '>=0.8.1-0 <0.9.0-0', hasData: false }
+38 silly addNameRange { name: 'starttls', range: '>=0.2.1-0 <0.3.0-0', hasData: false }
+39 verbose url raw bindings
+40 verbose url resolving [ 'https://registry.npmjs.org/', './bindings' ]
+41 verbose url resolved https://registry.npmjs.org/bindings
+42 info trying registry request attempt 1 at 13:32:11
+43 verbose etag "E0IA1FYM49RE7QMJZQ0COSZ85"
+44 http GET https://registry.npmjs.org/bindings
+45 verbose url raw starttls
+46 verbose url resolving [ 'https://registry.npmjs.org/', './starttls' ]
+47 verbose url resolved https://registry.npmjs.org/starttls
+48 info trying registry request attempt 1 at 13:32:11
+49 verbose etag "6PDIVWWYVP6SOEPMU8HXTNY9Y"
+50 http GET https://registry.npmjs.org/starttls
+51 verbose url raw debug
+52 verbose url resolving [ 'https://registry.npmjs.org/', './debug' ]
+53 verbose url resolved https://registry.npmjs.org/debug
+54 info trying registry request attempt 1 at 13:32:11
+55 verbose etag "92MNYP8O8OCQPE7HI5AOUWVF"
+56 http GET https://registry.npmjs.org/debug
+57 http 304 https://registry.npmjs.org/debug
+58 silly registry.get cb [ 304,
+58 silly registry.get   { date: 'Sat, 03 May 2014 05:32:13 GMT',
+58 silly registry.get     server: 'Apache',
+58 silly registry.get     via: '1.1 varnish',
+58 silly registry.get     'last-modified': 'Sat, 03 May 2014 05:32:13 GMT',
+58 silly registry.get     'cache-control': 'max-age=1',
+58 silly registry.get     etag: '"92MNYP8O8OCQPE7HI5AOUWVF"',
+58 silly registry.get     'x-served-by': 'cache-ty68-TYO',
+58 silly registry.get     'x-cache': 'HIT',
+58 silly registry.get     'x-cache-hits': '1',
+58 silly registry.get     'x-timer': 'S1399095133.801707268,VS0,VE170',
+58 silly registry.get     vary: 'Accept',
+58 silly registry.get     'content-length': '0',
+58 silly registry.get     'keep-alive': 'timeout=10, max=50',
+58 silly registry.get     connection: 'Keep-Alive' } ]
+59 verbose etag debug from cache
+60 silly addNameRange number 2 { name: 'debug', range: '>=0.8.1-0 <0.9.0-0', hasData: true }
+61 silly addNameRange versions [ 'debug',
+61 silly addNameRange   [ '0.0.1',
+61 silly addNameRange     '0.1.0',
+61 silly addNameRange     '0.2.0',
+61 silly addNameRange     '0.3.0',
+61 silly addNameRange     '0.4.0',
+61 silly addNameRange     '0.4.1',
+61 silly addNameRange     '0.5.0',
+61 silly addNameRange     '0.6.0',
+61 silly addNameRange     '0.7.0',
+61 silly addNameRange     '0.7.1',
+61 silly addNameRange     '0.7.2',
+61 silly addNameRange     '0.7.3',
+61 silly addNameRange     '0.7.4',
+61 silly addNameRange     '0.8.0',
+61 silly addNameRange     '0.8.1' ] ]
+62 verbose addNamed [ 'debug', '0.8.1' ]
+63 verbose addNamed [ '0.8.1', '0.8.1' ]
+64 silly lockFile a38530e1-debug-0-8-1 debug@0.8.1
+65 verbose lock debug@0.8.1 /Users/liuyazhong/.npm/a38530e1-debug-0-8-1.lock
+66 silly lockFile a38530e1-debug-0-8-1 debug@0.8.1
+67 silly lockFile a38530e1-debug-0-8-1 debug@0.8.1
+68 silly lockFile aca27dec-debug-0-8-1 debug@^0.8.1
+69 silly lockFile aca27dec-debug-0-8-1 debug@^0.8.1
+70 http 304 https://registry.npmjs.org/starttls
+71 silly registry.get cb [ 304,
+71 silly registry.get   { date: 'Sat, 03 May 2014 05:32:13 GMT',
+71 silly registry.get     server: 'Apache',
+71 silly registry.get     via: '1.1 varnish',
+71 silly registry.get     'last-modified': 'Sat, 03 May 2014 05:32:14 GMT',
+71 silly registry.get     'cache-control': 'max-age=1',
+71 silly registry.get     etag: '"6PDIVWWYVP6SOEPMU8HXTNY9Y"',
+71 silly registry.get     'x-served-by': 'cache-ty68-TYO',
+71 silly registry.get     'x-cache': 'MISS',
+71 silly registry.get     'x-cache-hits': '0',
+71 silly registry.get     'x-timer': 'S1399095133.800404072,VS0,VE256',
+71 silly registry.get     vary: 'Accept',
+71 silly registry.get     'content-length': '0',
+71 silly registry.get     'keep-alive': 'timeout=10, max=50',
+71 silly registry.get     connection: 'Keep-Alive' } ]
+72 verbose etag starttls from cache
+73 silly addNameRange number 2 { name: 'starttls', range: '>=0.2.1-0 <0.3.0-0', hasData: true }
+74 silly addNameRange versions [ 'starttls',
+74 silly addNameRange   [ '0.1.0',
+74 silly addNameRange     '0.1.1',
+74 silly addNameRange     '0.1.2',
+74 silly addNameRange     '0.1.3',
+74 silly addNameRange     '0.1.4',
+74 silly addNameRange     '0.1.5',
+74 silly addNameRange     '0.1.6',
+74 silly addNameRange     '0.1.7',
+74 silly addNameRange     '0.2.0',
+74 silly addNameRange     '0.2.1' ] ]
+75 verbose addNamed [ 'starttls', '0.2.1' ]
+76 verbose addNamed [ '0.2.1', '0.2.1' ]
+77 silly lockFile 132847b6-starttls-0-2-1 starttls@0.2.1
+78 verbose lock starttls@0.2.1 /Users/liuyazhong/.npm/132847b6-starttls-0-2-1.lock
+79 silly lockFile 132847b6-starttls-0-2-1 starttls@0.2.1
+80 silly lockFile 132847b6-starttls-0-2-1 starttls@0.2.1
+81 silly lockFile 8ca0e869-starttls-0-2-1 starttls@~0.2.1
+82 silly lockFile 8ca0e869-starttls-0-2-1 starttls@~0.2.1
+83 http 304 https://registry.npmjs.org/bindings
+84 silly registry.get cb [ 304,
+84 silly registry.get   { date: 'Sat, 03 May 2014 05:32:13 GMT',
+84 silly registry.get     server: 'Apache',
+84 silly registry.get     via: '1.1 varnish',
+84 silly registry.get     'last-modified': 'Sat, 03 May 2014 05:32:14 GMT',
+84 silly registry.get     'cache-control': 'max-age=1',
+84 silly registry.get     etag: '"E0IA1FYM49RE7QMJZQ0COSZ85"',
+84 silly registry.get     'x-served-by': 'cache-ty67-TYO',
+84 silly registry.get     'x-cache': 'MISS',
+84 silly registry.get     'x-cache-hits': '0',
+84 silly registry.get     'x-timer': 'S1399095133.799683332,VS0,VE274',
+84 silly registry.get     vary: 'Accept',
+84 silly registry.get     'content-length': '0',
+84 silly registry.get     'keep-alive': 'timeout=10, max=50',
+84 silly registry.get     connection: 'Keep-Alive' } ]
+85 verbose etag bindings from cache
+86 silly addNameRange number 2 { name: 'bindings', range: '>=1.1.0-0 <1.2.0-0', hasData: true }
+87 silly addNameRange versions [ 'bindings',
+87 silly addNameRange   [ '0.0.1',
+87 silly addNameRange     '0.1.0',
+87 silly addNameRange     '0.1.1',
+87 silly addNameRange     '0.2.0',
+87 silly addNameRange     '0.2.1',
+87 silly addNameRange     '0.2.2',
+87 silly addNameRange     '0.2.3',
+87 silly addNameRange     '0.2.4',
+87 silly addNameRange     '0.3.0',
+87 silly addNameRange     '0.4.0',
+87 silly addNameRange     '1.0.0',
+87 silly addNameRange     '1.1.0',
+87 silly addNameRange     '1.1.1',
+87 silly addNameRange     '1.2.0' ] ]
+88 verbose addNamed [ 'bindings', '1.1.1' ]
+89 verbose addNamed [ '1.1.1', '1.1.1' ]
+90 silly lockFile 52dd60a7-bindings-1-1-1 bindings@1.1.1
+91 verbose lock bindings@1.1.1 /Users/liuyazhong/.npm/52dd60a7-bindings-1-1-1.lock
+92 silly lockFile 52dd60a7-bindings-1-1-1 bindings@1.1.1
+93 silly lockFile 52dd60a7-bindings-1-1-1 bindings@1.1.1
+94 silly lockFile 3e6cf8d3-bindings-1-1-0 bindings@~1.1.0
+95 silly lockFile 3e6cf8d3-bindings-1-1-0 bindings@~1.1.0
+96 silly resolved [ { name: 'debug',
+96 silly resolved     version: '0.8.1',
+96 silly resolved     repository: { type: 'git', url: 'git://github.com/visionmedia/debug.git' },
+96 silly resolved     description: 'small debugging utility',
+96 silly resolved     keywords: [ 'debug', 'log', 'debugger' ],
+96 silly resolved     author: { name: 'TJ Holowaychuk', email: 'tj@vision-media.ca' },
+96 silly resolved     dependencies: {},
+96 silly resolved     devDependencies: { mocha: '*' },
+96 silly resolved     main: 'lib/debug.js',
+96 silly resolved     browser: './debug.js',
+96 silly resolved     engines: { node: '*' },
+96 silly resolved     files: [ 'lib/debug.js', 'debug.js' ],
+96 silly resolved     component: { scripts: [Object] },
+96 silly resolved     readme: '# debug\n\n  tiny node.js debugging utility modelled after node core\'s debugging technique.\n\n## Installation\n\n```\n$ npm install debug\n```\n\n## Usage\n\n With `debug` you simply invoke the exported function to generate your debug function, passing it a name which will determine if a noop function is returned, or a decorated `console.error`, so all of the `console` format string goodies you\'re used to work fine. A unique color is selected per-function for visibility.\n\nExample _app.js_:\n\n```js\nvar debug = require(\'debug\')(\'http\')\n  , http = require(\'http\')\n  , name = \'My App\';\n\n// fake app\n\ndebug(\'booting %s\', name);\n\nhttp.createServer(function(req, res){\n  debug(req.method + \' \' + req.url);\n  res.end(\'hello\\n\');\n}).listen(3000, function(){\n  debug(\'listening\');\n});\n\n// fake worker of some kind\n\nrequire(\'./worker\');\n```\n\nExample _worker.js_:\n\n```js\nvar debug = require(\'debug\')(\'worker\');\n\nsetInterval(function(){\n  debug(\'doing some work\');\n}, 1000);\n```\n\n The __DEBUG__ environment variable is then used to enable these based on space or comma-delimited names. Here are some examples:\n\n  ![debug http and worker](http://f.cl.ly/items/18471z1H402O24072r1J/Screenshot.png)\n\n  ![debug worker](http://f.cl.ly/items/1X413v1a3M0d3C2c1E0i/Screenshot.png)\n\n## Millisecond diff\n\n  When actively developing an application it can be useful to see when the time spent between one `debug()` call and the next. Suppose for example you invoke `debug()` before requesting a resource, and after as well, the "+NNNms" will show you how much time was spent between calls.\n\n  ![](http://f.cl.ly/items/2i3h1d3t121M2Z1A3Q0N/Screenshot.png)\n\n  When stdout is not a TTY, `Date#toUTCString()` is used, making it more useful for logging the debug information as shown below:\n\n  ![](http://f.cl.ly/items/112H3i0e0o0P0a2Q2r11/Screenshot.png)\n\n## Conventions\n\n If you\'re using this in one or more of your libraries, you _should_ use the name of your library so that developers may toggle debugging as desired without guessing names. If you have more than one debuggers you _should_ prefix them with your library name and use ":" to separate features. For example "bodyParser" from Connect would then be "connect:bodyParser".\n\n## Wildcards\n\n  The `*` character may be used as a wildcard. Suppose for example your library has debuggers named "connect:bodyParser", "connect:compress", "connect:session", instead of listing all three with `DEBUG=connect:bodyParser,connect.compress,connect:session`, you may simply do `DEBUG=connect:*`, or to run everything using this module simply use `DEBUG=*`.\n\n  You can also exclude specific debuggers by prefixing them with a "-" character.  For example, `DEBUG=* -connect:*` would include all debuggers except those starting with "connect:".\n\n## Browser support\n\n Debug works in the browser as well, currently persisted by `localStorage`. For example if you have `worker:a` and `worker:b` as shown below, and wish to debug both type `debug.enable(\'worker:*\')` in the console and refresh the page, this will remain until you disable with `debug.disable()`.\n\n```js\na = debug(\'worker:a\');\nb = debug(\'worker:b\');\n\nsetInterval(function(){\n  a(\'doing some work\');\n}, 1000);\n\nsetInterval(function(){\n  a(\'doing some work\');\n}, 1200);\n```\n\n## License\n\n(The MIT License)\n\nCopyright (c) 2011 TJ Holowaychuk &lt;tj@vision-media.ca&gt;\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\'Software\'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+96 silly resolved     readmeFilename: 'Readme.md',
+96 silly resolved     bugs: { url: 'https://github.com/visionmedia/debug/issues' },
+96 silly resolved     homepage: 'https://github.com/visionmedia/debug',
+96 silly resolved     _id: 'debug@0.8.1',
+96 silly resolved     _from: 'debug@^0.8.1' },
+96 silly resolved   { name: 'starttls',
+96 silly resolved     description: 'Upgrade a regular `net.Stream` connection to a secure `tls` connection.',
+96 silly resolved     version: '0.2.1',
+96 silly resolved     main: 'lib/starttls.js',
+96 silly resolved     homepage: 'https://github.com/mattcg/starttls',
+96 silly resolved     implements: [ 'CommonJS/Modules/1.0' ],
+96 silly resolved     contributors: [ [Object], [Object], [Object] ],
+96 silly resolved     keywords: [ 'tls', 'stream', 'net', 'upgrade', 'ssl' ],
+96 silly resolved     scripts: { test: 'make test' },
+96 silly resolved     devDependencies: { mocha: '1.x' },
+96 silly resolved     bugs: { url: 'https://github.com/mattcg/starttls/issues' },
+96 silly resolved     repository: { type: 'git', url: 'https://github.com/mattcg/starttls.git' },
+96 silly resolved     engines: { node: '0.x' },
+96 silly resolved     licenses: [ [Object] ],
+96 silly resolved     readme: '# Start TLS #\n\n[![Build Status](https://travis-ci.org/mattcg/starttls.png?branch=master)](https://travis-ci.org/mattcg/starttls)\n\nUpgrade a regular [`net.Stream`](http://nodejs.org/api/net.html#net_class_net_socket) connection to a secure [`tls`](http://nodejs.org/api/tls.html) connection.\n\nBased on code by [Andris Reinman](https://github.com/andris9/rai/blob/master/lib/starttls.js), itself based on an older version by [Nathan Rajlich](https://gist.github.com/TooTallNate/848444).\n\n## Usage ##\n\nThis library has one method and accepts either an options hash or a prepared socket as the first argument. It returns a [`SecurePair`](http://nodejs.org/api/tls.html#tls_class_securepair).\n\n### starttls(options, [onSecure]), starttls(socket, [onSecure]) ###\n\nThe following options are supported:\n\n- `socket` - if not provided, a socket will be created using [`net.createConnection`](http://nodejs.org/api/net.html#net_net_createconnection_options_connectionlistener)\n- `host` - used to perform automatic certificate identity checking, to guard against MITM attacks\n- `port` - only used to create a socket (along with the `host` option) if `socket` is not provided\n- `pair` - if you want to provide your own [`SecurePair`](http://nodejs.org/api/tls.html#tls_class_securepair) object\n\nThe `onSecure` callback is  optional and receives `null` or an error object as the first argument (see below for error cases). Within the callback context, `this` refers to the same [`SecurePair`](http://nodejs.org/api/tls.html#tls_class_securepair) object returned by `starttls`.\n\n```javascript\nvar net = require(\'net\');\nvar starttls = require(\'starttls\');\nvar options = {\n\tport: 21,\n\thost: example.com\n};\n\nnet.createConnection(options, function() {\n\toptions.socket = this;\n\tstarttls(options, function(err) {\n\t\tif (err) {\n\n\t\t\t// Something bad happened!\n\t\t\treturn;\n\t\t}\n\n\t\tthis.cleartext.write(\'garbage\');\n\t});\n});\n```\n\nYou should always check for an error before writing to the stream to avoid man-in-the-middle attacks. Errors are produced in the following cases:\n\n- the certificate authority authorization check failed or was negative\n- the server identity check was negative\n\nIf you only pass a socket object, server identity checking will not be performed automatically. In that case you should perform the check manually.\n\n```javascript\nstarttls(socket, function(err) {\n\tif (!tls.checkServerIdentity(host, this.cleartext.getPeerCertificate())) {\n\n\t\t// Hostname mismatch!\n\t\t// Report error and end connection...\n\t}\n});\n```\n\n## Example ##\n\nSee [socks5-https-client](https://github.com/mattcg/socks5-https-client) for use-case.\n\n## Tests ##\n\nRun `make test` or `npm test` to run tests.\n\n## License ##\n\nPortions of this code copyright (c) 2012, Andris Reinman and copyright (c) 2011, Nathan Rajlich.\n\nModified and redistributed under an [MIT license](http://mattcg.mit-license.org/).\n',
+96 silly resolved     readmeFilename: 'README.md',
+96 silly resolved     _id: 'starttls@0.2.1',
+96 silly resolved     _from: 'starttls@~0.2.1' },
+96 silly resolved   { name: 'bindings',
+96 silly resolved     description: 'Helper module for loading your native module\'s .node file',
+96 silly resolved     keywords: [ 'native', 'addon', 'bindings', 'gyp', 'waf', 'c', 'c++' ],
+96 silly resolved     version: '1.1.1',
+96 silly resolved     author:
+96 silly resolved      { name: 'Nathan Rajlich',
+96 silly resolved        email: 'nathan@tootallnate.net',
+96 silly resolved        url: 'http://tootallnate.net' },
+96 silly resolved     repository:
+96 silly resolved      { type: 'git',
+96 silly resolved        url: 'git://github.com/TooTallNate/node-bindings.git' },
+96 silly resolved     main: './bindings.js',
+96 silly resolved     readme: 'node-bindings\n=============\n### Helper module for loading your native module\'s .node file\n\nThis is a helper module for authors of Node.js native addon modules.\nIt is basically the "swiss army knife" of `require()`ing your native module\'s\n`.node` file.\n\nThroughout the course of Node\'s native addon history, addons have ended up being\ncompiled in a variety of different places, depending on which build tool and which\nversion of node was used. To make matters worse, now the _gyp_ build tool can\nproduce either a _Release_ or _Debug_ build, each being built into different\nlocations.\n\nThis module checks _all_ the possible locations that a native addon would be built\nat, and returns the first one that loads successfully.\n\n\nInstallation\n------------\n\nInstall with `npm`:\n\n``` bash\n$ npm install bindings\n```\n\nOr add it to the `"dependencies"` section of your _package.json_ file.\n\n\nExample\n-------\n\n`require()`ing the proper bindings file for the current node version, platform\nand architecture is as simple as:\n\n``` js\nvar bindings = require(\'bindings\')(\'binding.node\')\n\n// Use your bindings defined in your C files\nbindings.your_c_function()\n```\n\n\nNice Error Output\n-----------------\n\nWhen the `.node` file could not be loaded, `node-bindings` throws an Error with\na nice error message telling you exactly what was tried. You can also check the\n`err.tries` Array property.\n\n```\nError: Could not load the bindings file. Tried:\n → /Users/nrajlich/ref/build/binding.node\n → /Users/nrajlich/ref/build/Debug/binding.node\n → /Users/nrajlich/ref/build/Release/binding.node\n → /Users/nrajlich/ref/out/Debug/binding.node\n → /Users/nrajlich/ref/Debug/binding.node\n → /Users/nrajlich/ref/out/Release/binding.node\n → /Users/nrajlich/ref/Release/binding.node\n → /Users/nrajlich/ref/build/default/binding.node\n → /Users/nrajlich/ref/compiled/0.8.2/darwin/x64/binding.node\n    at bindings (/Users/nrajlich/ref/node_modules/bindings/bindings.js:84:13)\n    at Object.<anonymous> (/Users/nrajlich/ref/lib/ref.js:5:47)\n    at Module._compile (module.js:449:26)\n    at Object.Module._extensions..js (module.js:467:10)\n    at Module.load (module.js:356:32)\n    at Function.Module._load (module.js:312:12)\n    ...\n```\n\n\nLicense\n-------\n\n(The MIT License)\n\nCopyright (c) 2012 Nathan Rajlich &lt;nathan@tootallnate.net&gt;\n\nPermission is hereby granted, free of charge, to any person obtaining\na copy of this software and associated documentation files (the\n\'Software\'), to deal in the Software without restriction, including\nwithout limitation the rights to use, copy, modify, merge, publish,\ndistribute, sublicense, and/or sell copies of the Software, and to\npermit persons to whom the Software is furnished to do so, subject to\nthe following conditions:\n\nThe above copyright notice and this permission notice shall be\nincluded in all copies or substantial portions of the Software.\n\nTHE SOFTWARE IS PROVIDED \'AS IS\', WITHOUT WARRANTY OF ANY KIND,\nEXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF\nMERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.\nIN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY\nCLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,\nTORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE\nSOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.\n',
+96 silly resolved     readmeFilename: 'README.md',
+96 silly resolved     bugs: { url: 'https://github.com/TooTallNate/node-bindings/issues' },
+96 silly resolved     homepage: 'https://github.com/TooTallNate/node-bindings',
+96 silly resolved     _id: 'bindings@1.1.1',
+96 silly resolved     _from: 'bindings@~1.1.0' } ]
+97 info install debug@0.8.1 into /Users/liuyazhong/workspace/libetpan.node
+98 info install starttls@0.2.1 into /Users/liuyazhong/workspace/libetpan.node
+99 info install bindings@1.1.1 into /Users/liuyazhong/workspace/libetpan.node
+100 info installOne debug@0.8.1
+101 info installOne starttls@0.2.1
+102 info installOne bindings@1.1.1
+103 info /Users/liuyazhong/workspace/libetpan.node/node_modules/debug unbuild
+104 info /Users/liuyazhong/workspace/libetpan.node/node_modules/starttls unbuild
+105 info /Users/liuyazhong/workspace/libetpan.node/node_modules/bindings unbuild
+106 verbose tar unpack /Users/liuyazhong/.npm/debug/0.8.1/package.tgz
+107 silly lockFile a082548b-libetpan-node-node-modules-debug tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/debug
+108 verbose lock tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/debug /Users/liuyazhong/.npm/a082548b-libetpan-node-node-modules-debug.lock
+109 silly lockFile a75828f0-hong-npm-debug-0-8-1-package-tgz tar:///Users/liuyazhong/.npm/debug/0.8.1/package.tgz
+110 verbose lock tar:///Users/liuyazhong/.npm/debug/0.8.1/package.tgz /Users/liuyazhong/.npm/a75828f0-hong-npm-debug-0-8-1-package-tgz.lock
+111 verbose tar unpack /Users/liuyazhong/.npm/starttls/0.2.1/package.tgz
+112 silly lockFile 8d770159-etpan-node-node-modules-starttls tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/starttls
+113 verbose lock tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/starttls /Users/liuyazhong/.npm/8d770159-etpan-node-node-modules-starttls.lock
+114 silly lockFile 2aedd34b-g-npm-starttls-0-2-1-package-tgz tar:///Users/liuyazhong/.npm/starttls/0.2.1/package.tgz
+115 verbose lock tar:///Users/liuyazhong/.npm/starttls/0.2.1/package.tgz /Users/liuyazhong/.npm/2aedd34b-g-npm-starttls-0-2-1-package-tgz.lock
+116 verbose tar unpack /Users/liuyazhong/.npm/bindings/1.1.1/package.tgz
+117 silly lockFile e27b6663-etpan-node-node-modules-bindings tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/bindings
+118 verbose lock tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/bindings /Users/liuyazhong/.npm/e27b6663-etpan-node-node-modules-bindings.lock
+119 silly lockFile 93973548-g-npm-bindings-1-1-1-package-tgz tar:///Users/liuyazhong/.npm/bindings/1.1.1/package.tgz
+120 verbose lock tar:///Users/liuyazhong/.npm/bindings/1.1.1/package.tgz /Users/liuyazhong/.npm/93973548-g-npm-bindings-1-1-1-package-tgz.lock
+121 silly gunzTarPerm modes [ '755', '644' ]
+122 silly gunzTarPerm modes [ '755', '644' ]
+123 silly gunzTarPerm modes [ '755', '644' ]
+124 silly gunzTarPerm extractEntry package.json
+125 silly gunzTarPerm extractEntry package.json
+126 silly gunzTarPerm extractEntry package.json
+127 silly gunzTarPerm extractEntry debug.js
+128 silly gunzTarPerm extractEntry Readme.md
+129 silly gunzTarPerm extractEntry .npmignore
+130 silly gunzTarPerm extractEntry README.md
+131 silly gunzTarPerm extractEntry README.md
+132 silly gunzTarPerm extractEntry bindings.js
+133 silly gunzTarPerm extractEntry lib/debug.js
+134 silly gunzTarPerm extractEntry .travis.yml
+135 silly gunzTarPerm extractEntry Makefile
+136 silly gunzTarPerm extractEntry lib/starttls.js
+137 silly gunzTarPerm extractEntry test/starttls.js
+138 silly lockFile e27b6663-etpan-node-node-modules-bindings tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/bindings
+139 silly lockFile e27b6663-etpan-node-node-modules-bindings tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/bindings
+140 silly lockFile 93973548-g-npm-bindings-1-1-1-package-tgz tar:///Users/liuyazhong/.npm/bindings/1.1.1/package.tgz
+141 silly lockFile 93973548-g-npm-bindings-1-1-1-package-tgz tar:///Users/liuyazhong/.npm/bindings/1.1.1/package.tgz
+142 info preinstall bindings@1.1.1
+143 verbose readDependencies using package.json deps
+144 verbose readDependencies using package.json deps
+145 silly resolved []
+146 verbose about to build /Users/liuyazhong/workspace/libetpan.node/node_modules/bindings
+147 info build /Users/liuyazhong/workspace/libetpan.node/node_modules/bindings
+148 verbose linkStuff [ false,
+148 verbose linkStuff   false,
+148 verbose linkStuff   false,
+148 verbose linkStuff   '/Users/liuyazhong/workspace/libetpan.node/node_modules' ]
+149 info linkStuff bindings@1.1.1
+150 verbose linkBins bindings@1.1.1
+151 verbose linkMans bindings@1.1.1
+152 verbose rebuildBundles bindings@1.1.1
+153 info install bindings@1.1.1
+154 silly lockFile a082548b-libetpan-node-node-modules-debug tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/debug
+155 silly lockFile a082548b-libetpan-node-node-modules-debug tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/debug
+156 silly lockFile a75828f0-hong-npm-debug-0-8-1-package-tgz tar:///Users/liuyazhong/.npm/debug/0.8.1/package.tgz
+157 silly lockFile a75828f0-hong-npm-debug-0-8-1-package-tgz tar:///Users/liuyazhong/.npm/debug/0.8.1/package.tgz
+158 info postinstall bindings@1.1.1
+159 info preinstall debug@0.8.1
+160 verbose readDependencies using package.json deps
+161 verbose readDependencies using package.json deps
+162 silly resolved []
+163 verbose about to build /Users/liuyazhong/workspace/libetpan.node/node_modules/debug
+164 info build /Users/liuyazhong/workspace/libetpan.node/node_modules/debug
+165 verbose linkStuff [ false,
+165 verbose linkStuff   false,
+165 verbose linkStuff   false,
+165 verbose linkStuff   '/Users/liuyazhong/workspace/libetpan.node/node_modules' ]
+166 info linkStuff debug@0.8.1
+167 verbose linkBins debug@0.8.1
+168 verbose linkMans debug@0.8.1
+169 verbose rebuildBundles debug@0.8.1
+170 info install debug@0.8.1
+171 info postinstall debug@0.8.1
+172 silly lockFile 8d770159-etpan-node-node-modules-starttls tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/starttls
+173 silly lockFile 8d770159-etpan-node-node-modules-starttls tar:///Users/liuyazhong/workspace/libetpan.node/node_modules/starttls
+174 silly lockFile 2aedd34b-g-npm-starttls-0-2-1-package-tgz tar:///Users/liuyazhong/.npm/starttls/0.2.1/package.tgz
+175 silly lockFile 2aedd34b-g-npm-starttls-0-2-1-package-tgz tar:///Users/liuyazhong/.npm/starttls/0.2.1/package.tgz
+176 info preinstall starttls@0.2.1
+177 verbose readDependencies using package.json deps
+178 verbose readDependencies using package.json deps
+179 silly resolved []
+180 verbose about to build /Users/liuyazhong/workspace/libetpan.node/node_modules/starttls
+181 info build /Users/liuyazhong/workspace/libetpan.node/node_modules/starttls
+182 verbose linkStuff [ false,
+182 verbose linkStuff   false,
+182 verbose linkStuff   false,
+182 verbose linkStuff   '/Users/liuyazhong/workspace/libetpan.node/node_modules' ]
+183 info linkStuff starttls@0.2.1
+184 verbose linkBins starttls@0.2.1
+185 verbose linkMans starttls@0.2.1
+186 verbose rebuildBundles starttls@0.2.1
+187 info install starttls@0.2.1
+188 info postinstall starttls@0.2.1
+189 info build /Users/liuyazhong/workspace/libetpan.node
+190 verbose linkStuff [ false, false, false, '/Users/liuyazhong/workspace' ]
+191 info linkStuff libetpan@0.1.0
+192 verbose linkBins libetpan@0.1.0
+193 verbose linkMans libetpan@0.1.0
+194 verbose rebuildBundles libetpan@0.1.0
+195 verbose rebuildBundles [ 'bindings', 'debug', 'nan', 'starttls' ]
+196 info install libetpan@0.1.0
+197 verbose unsafe-perm in lifecycle true
+198 info libetpan@0.1.0 Failed to exec install script
+199 error libetpan@0.1.0 install: `sh scripts/install.sh`
+199 error Exit status 1
+200 error Failed at the libetpan@0.1.0 install script.
+200 error This is most likely a problem with the libetpan package,
+200 error not with npm itself.
+200 error Tell the author that this fails on your system:
+200 error     sh scripts/install.sh
+200 error You can get their info via:
+200 error     npm owner ls libetpan
+200 error There is likely additional logging output above.
+201 error System Darwin 13.1.0
+202 error command "/usr/local/bin/node" "/usr/local/bin/npm" "install"
+203 error cwd /Users/liuyazhong/workspace/libetpan.node
+204 error node -v v0.10.26
+205 error npm -v 1.4.3
+206 error code ELIFECYCLE
+207 verbose exit [ 1, true ]
