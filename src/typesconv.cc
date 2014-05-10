@@ -40,6 +40,9 @@
 
 #include "response.h"
 
+// just for libetpan.node internal
+#define NAN_METHOD2(name) _NAN_METHOD_RETURN_TYPE name(_NAN_METHOD_ARGS, int dataType)
+
 using namespace v8;
 using namespace etpanjs;
 using namespace node;
@@ -60,54 +63,55 @@ enum MessageFlag {
 static int imap_mailbox_flags_to_flags(struct mailimap_mbx_list_flags * imap_flags);
 static MessageFlag flags_from_lep_att_dynamic(struct mailimap_msg_att_dynamic * att_dynamic);
 
-#define GET_FOLDERS(flag)       \
-    NanScope();     \
-    Response * obj = ObjectWrap::Unwrap<Response>(args.This());     \
-    struct mailimap_response * response = obj->getResponse();       \
-    clist * folders = clist_new();      \
-    if (response->rsp_cont_req_or_resp_data_list != NULL) {     \
-        for(clistiter * cur = clist_begin(response->rsp_cont_req_or_resp_data_list) ; cur != NULL ; cur = clist_next(cur)) {    \
-            struct mailimap_cont_req_or_resp_data * cont_req_or_resp_data;      \
-            cont_req_or_resp_data = (struct mailimap_cont_req_or_resp_data *) clist_content(cur);   \
-            if (cont_req_or_resp_data->rsp_type == MAILIMAP_RESP_RESP_DATA) {       \
-                struct mailimap_response_data * resp_data;      \
-                resp_data = cont_req_or_resp_data->rsp_data.rsp_resp_data;      \
-                if (resp_data->rsp_type == MAILIMAP_RESP_DATA_TYPE_MAILBOX_DATA) {      \
-                    struct mailimap_mailbox_data * mb_data;     \
-                    mb_data = resp_data->rsp_data.rsp_mailbox_data;     \
-                    if (mb_data->mbd_type == flag) {        \
-                        clist_append(folders, mb_data->mbd_data.mbd_list);      \
-                    }                                                           \
-                }                                                               \
-            }                                                                   \
-        }                                                                       \
-    }                                                                           \
-    unsigned int count = clist_count(folders);      \
-    Handle<Array> array = Array::New(count);        \
-    unsigned int i = 0;     \
-    for(clistiter * iter = clist_begin(folders) ; iter != NULL ; iter = clist_next(iter)) {     \
-        Local<Object> obj = Object::New();      \
-        struct mailimap_mailbox_list * mb_list = (struct mailimap_mailbox_list *) clist_content(iter);      \
-        obj->Set(NanSymbol("path"), String::New(mb_list->mb_name));     \
-        char delimiter[2];      \
-        delimiter[0] = mb_list->mb_delimiter;       \
-        delimiter[1] = 0;       \
-        obj->Set(NanSymbol("delimiter"), String::New(delimiter));       \
-        obj->Set(NanSymbol("flags"), Integer::New(imap_mailbox_flags_to_flags(mb_list->mb_flag)));      \
-        array->Set(i, obj);     \
-        i ++;       \
-    }       \
-    clist_free(folders);                                                        \
-    NanReturnValue(array);                                                \
+NAN_METHOD2(getFoldersFromResponseWithOption) {
+    NanScope();
+    Response * obj = ObjectWrap::Unwrap<Response>(args.This());
+    struct mailimap_response * response = obj->getResponse();
+    clist * folders = clist_new();
+    if (response->rsp_cont_req_or_resp_data_list != NULL) {
+        for(clistiter * cur = clist_begin(response->rsp_cont_req_or_resp_data_list) ; cur != NULL ; cur = clist_next(cur)) {
+            struct mailimap_cont_req_or_resp_data * cont_req_or_resp_data;
+            cont_req_or_resp_data = (struct mailimap_cont_req_or_resp_data *) clist_content(cur);
+            if (cont_req_or_resp_data->rsp_type == MAILIMAP_RESP_RESP_DATA) {
+                struct mailimap_response_data * resp_data;
+                resp_data = cont_req_or_resp_data->rsp_data.rsp_resp_data;
+                if (resp_data->rsp_type == MAILIMAP_RESP_DATA_TYPE_MAILBOX_DATA) {
+                    struct mailimap_mailbox_data * mb_data;
+                    mb_data = resp_data->rsp_data.rsp_mailbox_data;
+                    if (mb_data->mbd_type == dataType) {
+                        clist_append(folders, mb_data->mbd_data.mbd_list);
+                    }
+                }
+            }
+        }
+    }
+    unsigned int count = clist_count(folders);
+    Handle<Array> array = Array::New(count);
+    unsigned int i = 0;
+    for(clistiter * iter = clist_begin(folders) ; iter != NULL ; iter = clist_next(iter)) {
+        Local<Object> obj = Object::New();
+        struct mailimap_mailbox_list * mb_list = (struct mailimap_mailbox_list *) clist_content(iter);
+        obj->Set(NanSymbol("path"), String::New(mb_list->mb_name));
+        char delimiter[2];
+        delimiter[0] = mb_list->mb_delimiter;
+        delimiter[1] = 0;
+        obj->Set(NanSymbol("delimiter"), String::New(delimiter));
+        obj->Set(NanSymbol("flags"), Integer::New(imap_mailbox_flags_to_flags(mb_list->mb_flag)));
+        array->Set(i, obj);
+        i ++;
+    }
+    clist_free(folders);
+    NanReturnValue(array);
+}
 
 NAN_METHOD(etpanjs::getFoldersFromResponseList)
 {
-    GET_FOLDERS(MAILIMAP_MAILBOX_DATA_LIST)
+    return getFoldersFromResponseWithOption(args, MAILIMAP_MAILBOX_DATA_LIST);
 }
 
 NAN_METHOD(etpanjs::getFoldersFromResponseLsub)
 {
-    GET_FOLDERS(MAILIMAP_MAILBOX_DATA_LSUB)
+    return getFoldersFromResponseWithOption(args, MAILIMAP_MAILBOX_DATA_LSUB);
 }
 
 static Handle<Value> bodyToV8(struct mailimap_body * body);
