@@ -41,7 +41,7 @@
 #include "response.h"
 
 // just for libetpan.node internal
-#define NAN_METHOD2(name) _NAN_METHOD_RETURN_TYPE name(_NAN_METHOD_ARGS, int dataType)
+#define NAN_PRIVATE_FUNCTION(name) _NAN_METHOD_RETURN_TYPE name(_NAN_METHOD_ARGS, int dataType)
 
 using namespace v8;
 using namespace etpanjs;
@@ -63,7 +63,7 @@ enum MessageFlag {
 static int imap_mailbox_flags_to_flags(struct mailimap_mbx_list_flags * imap_flags);
 static MessageFlag flags_from_lep_att_dynamic(struct mailimap_msg_att_dynamic * att_dynamic);
 
-NAN_METHOD2(getFoldersFromResponseWithOption) {
+NAN_PRIVATE_FUNCTION(getFoldersFromResponseWithOption) {
     NanScope();
     Response * obj = ObjectWrap::Unwrap<Response>(args.This());
     struct mailimap_response * response = obj->getResponse();
