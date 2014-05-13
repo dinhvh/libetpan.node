@@ -33,7 +33,7 @@
 #include <v8.h>
 #include <node_buffer.h>
 #include <libetpan/libetpan.h>
-
+#include "nan.h"
 #include "response.h"
 
 using namespace v8;
@@ -91,13 +91,13 @@ enum {
     PARSER_CONT_REQ = 1 << 2,
 };
 
-Handle<Value> responseParse(const Arguments& args)
+NAN_METHOD(responseParse)
 {
-  HandleScope scope;
+  NanScope();
   
   if (args.Length() < 2) {
     ThrowException(Exception::TypeError(String::New("Wrong number of arguments")));
-    return scope.Close(Undefined());
+    NanReturnUndefined();
   }
 
   Handle<Object> buffer = node::Buffer::New(args[0]->ToString());
@@ -192,7 +192,7 @@ Handle<Value> responseParse(const Arguments& args)
     fprintf(stderr, "response: parsing successful\n");
   }
   
-  return scope.Close(responseWrapper);
+  NanReturnValue(responseWrapper);
 }
 
 

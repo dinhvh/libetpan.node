@@ -30,26 +30,26 @@
  */
 
 #ifndef ETPANJS_TYPESCONV_H
-
 #define ETPANJS_TYPESCONV_H
 
 #include <node.h>
+#include "nan.h"
 
 using namespace v8;
 
 namespace etpanjs {
 
-Handle<Value> getFoldersFromResponseList(const Arguments& args);
-Handle<Value> getFoldersFromResponseLsub(const Arguments& args);
-Handle<Value> getFetchItemsFromResponse(const Arguments& args);
-Handle<Value> getCapabilitiesFromResponse(const Arguments& args);
-Handle<Value> getUIDPlusCopyResponseFromResponse(const Arguments& args);
-Handle<Value> getUIDPlusAppendResponseFromResponse(const Arguments& args);
-Handle<Value> getStatusResponseFromResponse(const Arguments& args);
-Handle<Value> getIDResponseFromResponse(const Arguments& args);
-Handle<Value> getSelectResponseFromResponse(const Arguments& args);
-Handle<Value> getNoopResponseFromResponse(const Arguments& args);
-Handle<Value> getSearchResponseFromResponse(const Arguments& args);
+NAN_METHOD(getFoldersFromResponseList);
+NAN_METHOD(getFoldersFromResponseLsub);
+NAN_METHOD(getFetchItemsFromResponse);
+NAN_METHOD(getCapabilitiesFromResponse);
+NAN_METHOD(getUIDPlusCopyResponseFromResponse);
+NAN_METHOD(getUIDPlusAppendResponseFromResponse);
+NAN_METHOD(getStatusResponseFromResponse);
+NAN_METHOD(getIDResponseFromResponse);
+NAN_METHOD(getSelectResponseFromResponse);
+NAN_METHOD(getNoopResponseFromResponse);
+NAN_METHOD(getSearchResponseFromResponse);
 
 }
 

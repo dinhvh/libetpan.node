@@ -65,47 +65,46 @@ Response::~Response()
 void Response::Init(Handle<Object> exports)
 {
     Local<FunctionTemplate> tpl = FunctionTemplate::New();
-
-    responseTemplate = Persistent<FunctionTemplate>::New(tpl);
-    responseTemplate->InstanceTemplate()->SetInternalFieldCount(1);  
-    responseTemplate->SetClassName(String::NewSymbol("Response"));
+    NanAssignPersistent(FunctionTemplate, responseTemplate, tpl);
+    tpl->SetClassName(NanSymbol("Response"));
+    tpl->InstanceTemplate()->SetInternalFieldCount(1);
     
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getFoldersFromResponseList"), FunctionTemplate::New(getFoldersFromResponseList)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getFoldersFromResponseLsub"), FunctionTemplate::New(getFoldersFromResponseLsub)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getFetchItemsFromResponse"), FunctionTemplate::New(getFetchItemsFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getCapabilitiesFromResponse"), FunctionTemplate::New(getCapabilitiesFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getUIDPlusCopyResponseFromResponse"), FunctionTemplate::New(getUIDPlusCopyResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getUIDPlusAppendResponseFromResponse"), FunctionTemplate::New(getUIDPlusAppendResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getStatusResponseFromResponse"), FunctionTemplate::New(getStatusResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getIDResponseFromResponse"), FunctionTemplate::New(getIDResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getSelectResponseFromResponse"), FunctionTemplate::New(getSelectResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getNoopResponseFromResponse"), FunctionTemplate::New(getNoopResponseFromResponse)->GetFunction());
-    responseTemplate->PrototypeTemplate()->Set(String::NewSymbol("getSearchResponseFromResponse"), FunctionTemplate::New(getSearchResponseFromResponse)->GetFunction());
-    
-    exports->Set(String::NewSymbol("Response"), responseTemplate->GetFunction());
+    v8::Local<v8::ObjectTemplate> proto = tpl->PrototypeTemplate();
+    proto->Set(NanSymbol("getFoldersFromResponseList"), FunctionTemplate::New(getFoldersFromResponseList)->GetFunction());
+    proto->Set(NanSymbol("getFoldersFromResponseLsub"), FunctionTemplate::New(getFoldersFromResponseLsub)->GetFunction());
+    proto->Set(NanSymbol("getFetchItemsFromResponse"), FunctionTemplate::New(getFetchItemsFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getCapabilitiesFromResponse"), FunctionTemplate::New(getCapabilitiesFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getUIDPlusCopyResponseFromResponse"), FunctionTemplate::New(getUIDPlusCopyResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getUIDPlusAppendResponseFromResponse"), FunctionTemplate::New(getUIDPlusAppendResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getStatusResponseFromResponse"), FunctionTemplate::New(getStatusResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getIDResponseFromResponse"), FunctionTemplate::New(getIDResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getSelectResponseFromResponse"), FunctionTemplate::New(getSelectResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getNoopResponseFromResponse"), FunctionTemplate::New(getNoopResponseFromResponse)->GetFunction());
+    proto->Set(NanSymbol("getSearchResponseFromResponse"), FunctionTemplate::New(getSearchResponseFromResponse)->GetFunction());
+    exports->Set(NanSymbol("Response"), FunctionTemplate::New(New)->GetFunction());
 }
 
-Handle<Object> Response::New(const Arguments& args)
+NAN_METHOD(Response::New)
 {
-    HandleScope scope;
+    NanScope();
     Response * response = new Response();
     response->Wrap(args.This());
-    args.This()->Set(String::NewSymbol("result"), args[0]->ToInteger());
-    args.This()->Set(String::NewSymbol("type"), args[1]->ToInteger());
-    args.This()->Set(String::NewSymbol("hasIdleData"), args[2]->ToBoolean());
-    return args.This();
+    args.This()->Set(NanSymbol("result"), args[0]->ToInteger());
+    args.This()->Set(NanSymbol("type"), args[1]->ToInteger());
+    args.This()->Set(NanSymbol("hasIdleData"), args[2]->ToBoolean());
+    NanReturnValue(args.This());
 }
 
 Handle<Object> Response::New(int result, int type, bool hasIdleData)
 {
-    HandleScope scope;
-    Handle<Object> instance = responseTemplate->InstanceTemplate()->NewInstance();
+    NanScope();
+    Handle<Object> instance = NanPersistentToLocal(responseTemplate)->InstanceTemplate()->NewInstance();
     Response * response = new Response();
     response->Wrap(instance);
-    instance->Set(String::NewSymbol("result"), Integer::New(result));
-    instance->Set(String::NewSymbol("type"), Integer::New(type));
-    instance->Set(String::NewSymbol("hasIdleData"), Boolean::New(hasIdleData));
-    return scope.Close(instance);
+    instance->Set(NanSymbol("result"), Integer::New(result));
+    instance->Set(NanSymbol("type"), Integer::New(type));
+    instance->Set(NanSymbol("hasIdleData"), Boolean::New(hasIdleData));
+    return instance;
 }
 
 void Response::setResponse(struct mailimap_response * response)
