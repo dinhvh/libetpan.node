@@ -33,32 +33,16 @@ var test = require('tape');
 var etpan = require('../lib/libetpan').etpan;
 var Constants = require('../lib/libetpan').Constants;
 
-test('empty response should throw error', function(t) {
-  var emptyRes = '';
-  var r = etpan.responseParse(emptyRes, Constants.PARSER_ENABLE_GREETING);
-  t.equal(r.result, Constants.MAILIMAP_ERROR_PARSE);
-  t.end();
-});
-
-test('greeting response without crlf', function(t) {
-  var greetingRes = '* OK [CAPABILITY IMAP4 IMAP4rev1 IDLE XAPPLEPUSHSERVICE ID UIDPLUS AUTH=LOGIN NAMESPACE] QQMail IMAP4Server ready';
-  var r = etpan.responseParse(greetingRes, Constants.PARSER_ENABLE_GREETING);
-  // This should be returns MAILIMAP_ERROR_NEEDS_MORE_DATA(42)?
-  t.equal(r.result, Constants.MAILIMAP_ERROR_PARSE);
-  t.end();
-});
-
-test('greeting response', function(t) {
-  var matches = [
-    Constants.CapabilityIdle,
-    Constants.CapabilityId,
-    Constants.CapabilityUIDPlus,
-    Constants.CapabilityAuthLogin,
-    Constants.CapabilityNamespace
-  ];
-  var greetingRes = '* OK [CAPABILITY IMAP4 IMAP4rev1 IDLE XAPPLEPUSHSERVICE ID UIDPLUS AUTH=LOGIN NAMESPACE] QQMail IMAP4Server ready\r\n';
-  var r = etpan.responseParse(greetingRes, Constants.PARSER_ENABLE_GREETING);
+test('AUTH success', function(t) {
+  var res = 'a001 OK GSSAPI authentication successful\r\n';
+  var r = etpan.responseParse(res, Constants.PARSER_ENABLE_RESPONSE);
   t.equal(r.result, Constants.MAILIMAP_NO_ERROR);
-  t.deepEqual(r.getCapabilitiesFromResponse(), matches);
+  t.end();
+})
+
+test('LOGIN success', function(t) {
+  var res = 'a001 OK LOGIN completed\r\n';
+  var r = etpan.responseParse(res, Constants.PARSER_ENABLE_RESPONSE);
+  t.equal(r.result, Constants.MAILIMAP_NO_ERROR);
   t.end();
 });

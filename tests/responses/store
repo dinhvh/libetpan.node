@@ -1,0 +1,4 @@
+* 2 FETCH (FLAGS (\Deleted \Seen))
+* 3 FETCH (FLAGS (\Deleted))
+* 4 FETCH (FLAGS (\Deleted \Flagged \Seen))
+A003 OK STORE completed

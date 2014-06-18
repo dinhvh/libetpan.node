@@ -33,7 +33,7 @@
   },
   "scripts": {
     "install": "sh scripts/install.sh",
-    "test": "tape tests/*.js"
+    "test": "tape tests/test-*.js"
   },
   "main": "lib/libetpan.js",
   "devDependencies": {
